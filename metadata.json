@@ -1,0 +1,6 @@
+{
+  "name": "BiblioSaber - Sistema de Gestão de Biblioteca",
+  "description": "Plataforma completa de biblioteca com portal do aluno, portal da bibliotecária, acervo com status de devolução, reservas online, aprovações, notificações automáticas, multas configuráveis e relatórios analíticos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
