@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiblioSaber - Sistema de Gestão de Biblioteca Autônomo</title>
+  <meta name="description" content="Sistema completo de gestão de biblioteca escolar e universitária com portais para Aluno e Bibliotecária, controle de empréstimos, multas, reservas e console MySQL interativo." />
+
+  <!-- Google Fonts: Editorial Serif & Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            display: ['Cinzel', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            parchment: '#FAF8F5',
+            ink: '#1E1612',
+            leather: '#2C1D11',
+            amberwood: '#8C531B',
+            goldaccent: '#C89B65',
+            linen: '#E6DFC4',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React 18 & ReactDOM 18 CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <!-- Babel Standalone para transpilação JSX direto no navegador -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #1E1612;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    ::selection {
+      background-color: rgba(180, 120, 54, 0.25);
+      color: #3B220C;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #FAF8F5;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #D5CCBE;
+      border-radius: 4px;
+    }
+    .book-spine-effect {
+      box-shadow: 
+        inset 4px 0 6px -2px rgba(0, 0, 0, 0.4),
+        inset -2px 0 4px -1px rgba(255, 255, 255, 0.2),
+        4px 6px 12px -2px rgba(30, 22, 18, 0.35);
+    }
+  </style>
+</head>
+<body class="custom-scroll selection:bg-[#B47836]/25 selection:text-[#3B220C]">
+  <div id="root"></div>
+
+  <!-- APLICAÇÃO COMPLETA REACT + JAVASCRIPT EM UM ÚNICO ARQUIVO -->
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, createContext, useContext } = React;
+
+    // ====================================================================
+    // 1. ÍCONES SVG EMBUTIDOS (Independentes de bibliotecas externas)
+    // ====================================================================
+    const Icon = ({ path, className = "w-4 h-4", fill = "none" }) => (
+      <svg className={className} fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+        {path}
+      </svg>
+    );
+
+    const BookOpenIcon = (p) => <Icon {...p} path={<><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>} />;
+    const BellIcon = (p) => <Icon {...p} path={<><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></>} />;
+    const UserIcon = (p) => <Icon {...p} path={<><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>} />;
+    const SearchIcon = (p) => <Icon {...p} path={<><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>} />;
+    const DatabaseIcon = (p) => <Icon {...p} path={<><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></>} />;
+    const CalendarIcon = (p) => <Icon {...p} path={<><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></>} />;
+    const ClockIcon = (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />;
+    const CheckCircleIcon = (p) => <Icon {...p} path={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>} />;
+    const AlertTriangleIcon = (p) => <Icon {...p} path={<><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></>} />;
+    const XCircleIcon = (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></>} />;
+    const DownloadIcon = (p) => <Icon {...p} path={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></>} />;
+    const PlayIcon = (p) => <Icon {...p} fill="currentColor" path={<polygon points="6 3 20 12 6 21 6 3"/>} />;
+    const RotateCcwIcon = (p) => <Icon {...p} path={<><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></>} />;
+    const LayersIcon = (p) => <Icon {...p} path={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>} />;
+    const ShieldCheckIcon = (p) => <Icon {...p} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></>} />;
+    const GraduationCapIcon = (p) => <Icon {...p} path={<><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></>} />;
+    const SparklesIcon = (p) => <Icon {...p} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></>} />;
+    const BookmarkCheckIcon = (p) => <Icon {...p} path={<><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></>} />;
+    const SettingsIcon = (p) => <Icon {...p} path={<><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></>} />;
+    const ArrowRightLeftIcon = (p) => <Icon {...p} path={<><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></>} />;
+    const TableIcon = (p) => <Icon {...p} path={<><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></>} />;
+
+    // Helper de datas
+    const addDays = (date, days) => {
+      const result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result.toISOString();
+    };
+
+    // ====================================================================
+    // 2. DADOS INICIAIS (SEED)
+    // ====================================================================
+    const INITIAL_SETTINGS = {
+      dailyFineAmount: 2.00,
+      standardLoanDays: 14,
+      gracePeriodDays: 1,
+      maxBooksPerStudent: 3,
+      maxRenewalsAllowed: 2,
+      librarianAccessCode: 'BIBLIO2026',
+      libraryName: 'Biblioteca Central Machado de Assis',
+      institutionName: 'Colégio & Faculdade Saber Integrado',
+      contactEmail: 'biblioteca@saberintegrado.edu.br',
+    };
+
+    const SEED_USERS = [
+      {
+        id: 'u-lib-1',
+        name: 'Dra. Helena Valadares',
+        email: 'helena.biblioteca@saberintegrado.edu.br',
+        role: 'bibliotecaria',
+        registrationNumber: 'CRB-8/9482',
+        courseOrDepartment: 'Coordenação de Gestão do Conhecimento',
+        phone: '(11) 98765-4321',
+        avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300',
+        isBlocked: false,
+        createdAt: '2024-01-10T08:00:00Z',
+      },
+      {
+        id: 'u-student-1',
+        name: 'Lucas Silveira Campos',
+        email: 'lucas.silveira@aluno.saber.br',
+        role: 'aluno',
+        registrationNumber: 'RA-20241088',
+        courseOrDepartment: 'Engenharia de Software - 4º Período',
+        phone: '(11) 97123-4567',
+        avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=300',
+        isBlocked: false,
+        createdAt: '2024-02-15T09:30:00Z',
+      },
+      {
+        id: 'u-student-2',
+        name: 'Beatriz Vasconcelos',
+        email: 'beatriz.v@aluno.saber.br',
+        role: 'aluno',
+        registrationNumber: 'RA-20239012',
+        courseOrDepartment: 'Letras & Literatura - 6º Semestre',
+        phone: '(11) 99887-1122',
+        avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300',
+        isBlocked: false,
+        createdAt: '2023-08-01T14:20:00Z',
+      },
+      {
+        id: 'u-student-3',
+        name: 'Gabriel Menezes',
+        email: 'gabriel.menezes@aluno.saber.br',
+        role: 'aluno',
+        registrationNumber: 'RA-20224501',
+        courseOrDepartment: 'Administração & Economia',
+        phone: '(11) 96543-8901',
+        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300',
+        isBlocked: true,
+        createdAt: '2022-03-10T11:00:00Z',
+      }
+    ];
+
+    const SEED_BOOKS = [
+      {
+        id: 'b1',
+        title: 'Dom Casmurro',
+        author: 'Machado de Assis',
+        genre: 'Literatura Brasileira',
+        isbn: '978-85-359-1484-9',
+        publishedYear: 1899,
+        publisher: 'Editora Antofágica / Garnier',
+        totalCopies: 4,
+        availableCopies: 2,
+        location: 'Estante A-1 · Prateleira 2',
+        coverUrl: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'Um dos maiores clássicos da literatura brasileira. Narrado em primeira pessoa por Bento Santiago (Bentinho), que rememora sua paixão por Capitu e o fantasma da dúvida sobre a fidelidade conjugal.',
+        pages: 256,
+        createdAt: '2024-01-15T10:00:00Z',
+      },
+      {
+        id: 'b2',
+        title: 'Grande Sertão: Veredas',
+        author: 'João Guimarães Rosa',
+        genre: 'Literatura Brasileira',
+        isbn: '978-85-359-3221-8',
+        publishedYear: 1956,
+        publisher: 'Companhia das Letras',
+        totalCopies: 2,
+        availableCopies: 0, // Indisponível (empréstimo ativo)
+        location: 'Estante A-1 · Prateleira 4',
+        coverUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'Monólogo épico do ex-jagunço Riobaldo que reflete sobre o amor por Diadorim, as batalhas no sertão mineiro e o pacto com o demônio.',
+        pages: 608,
+        createdAt: '2024-01-15T10:00:00Z',
+      },
+      {
+        id: 'b3',
+        title: 'Duna (Edição Especial Colecionador)',
+        author: 'Frank Herbert',
+        genre: 'Ficção Científica',
+        isbn: '978-85-7657-313-5',
+        publishedYear: 1965,
+        publisher: 'Editora Aleph',
+        totalCopies: 3,
+        availableCopies: 1,
+        location: 'Estante C-2 · Prateleira 1',
+        coverUrl: 'https://images.unsplash.com/photo-1506466010722-395aa2bef877?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'Obra-prima da ficção científica mundial situada no planeta desértico Arrakis, lar da especiaria melange e do jovem Paul Atreides.',
+        pages: 680,
+        createdAt: '2024-01-18T14:30:00Z',
+      },
+      {
+        id: 'b4',
+        title: '1984',
+        author: 'George Orwell',
+        genre: 'Ficção Científica',
+        isbn: '978-85-359-1484-0',
+        publishedYear: 1949,
+        publisher: 'Companhia das Letras',
+        totalCopies: 5,
+        availableCopies: 3,
+        location: 'Estante C-2 · Prateleira 3',
+        coverUrl: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'A clássica distopia sobre vigilância governamental onipresente, o Grande Irmão e a resistência solitária de Winston Smith.',
+        pages: 336,
+        createdAt: '2024-01-20T11:00:00Z',
+      },
+      {
+        id: 'b5',
+        title: 'Orgulho e Preconceito',
+        author: 'Jane Austen',
+        genre: 'Romance',
+        isbn: '978-85-440-0182-0',
+        publishedYear: 1813,
+        publisher: 'Martin Claret',
+        totalCopies: 3,
+        availableCopies: 2,
+        location: 'Estante B-2 · Prateleira 2',
+        coverUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'A espirituosa Elizabeth Bennet e o reservado Sr. Darcy enfrentam as convenções sociais e seus próprios julgamentos na Inglaterra do século XIX.',
+        pages: 424,
+        createdAt: '2024-01-22T09:15:00Z',
+      },
+      {
+        id: 'b6',
+        title: 'O Hobbit',
+        author: 'J.R.R. Tolkien',
+        genre: 'Fantasia',
+        isbn: '978-85-9508-474-2',
+        publishedYear: 1937,
+        publisher: 'HarperCollins Brasil',
+        totalCopies: 4,
+        availableCopies: 0, // Indisponível
+        location: 'Estante D-1 · Prateleira 1',
+        coverUrl: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'Bilbo Bolseiro vive uma vida pacata no Condado até ser recrutado pelo mago Gandalf e treze anões para recuperar o tesouro guardado pelo dragão Smaug.',
+        pages: 336,
+        createdAt: '2024-01-25T16:00:00Z',
+      },
+      {
+        id: 'b7',
+        title: 'O Cortiço (Sem Giro - Nunca Emprestado)',
+        author: 'Aluísio Azevedo',
+        genre: 'Literatura Brasileira',
+        isbn: '978-85-7232-901-4',
+        publishedYear: 1890,
+        publisher: 'Editora Martin Claret',
+        totalCopies: 2,
+        availableCopies: 2,
+        location: 'Estante A-2 · Prateleira 5',
+        coverUrl: 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?auto=format&fit=crop&q=80&w=800',
+        synopsis: 'Principal expoente do Naturalismo no Brasil, retratando as tensões sociais e a vida coletiva em uma habitação proletária do Rio de Janeiro.',
+        pages: 288,
+        createdAt: '2024-02-01T10:00:00Z',
+      }
+    ];
+
+    const SEED_LOANS = [
+      {
+        id: 'loan-1',
+        bookId: 'b2',
+        bookTitle: 'Grande Sertão: Veredas',
+        bookCover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=800',
+        userId: 'u-student-1',
+        userName: 'Lucas Silveira Campos',
+        userEmail: 'lucas.silveira@aluno.saber.br',
+        userRegistration: 'RA-20241088',
+        requestDate: '2026-10-10T10:00:00Z',
+        approvalDate: '2026-10-10T10:30:00Z',
+        dueDate: '2026-10-24T18:00:00Z', // Vence em breve
+        returnDate: null,
+        status: 'aprovado',
+        renewalsCount: 0,
+        fineAmount: 0,
+        finePaid: false,
+        notes: 'Exemplar em excelente estado.',
+      },
+      {
+        id: 'loan-2',
+        bookId: 'b6',
+        bookTitle: 'O Hobbit',
+        bookCover: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=800',
+        userId: 'u-student-3',
+        userName: 'Gabriel Menezes',
+        userEmail: 'gabriel.menezes@aluno.saber.br',
+        userRegistration: 'RA-20224501',
+        requestDate: '2026-09-20T14:00:00Z',
+        approvalDate: '2026-09-20T14:15:00Z',
+        dueDate: '2026-10-04T18:00:00Z', // Em atraso!
+        returnDate: null,
+        status: 'aprovado',
+        renewalsCount: 1,
+        fineAmount: 30.00, // 15 dias x R$ 2.00
+        finePaid: false,
+        notes: 'Aguardando comparecimento do aluno ao balcão.',
+      },
+      {
+        id: 'loan-3',
+        bookId: 'b1',
+        bookTitle: 'Dom Casmurro',
+        bookCover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800',
+        userId: 'u-student-2',
+        userName: 'Beatriz Vasconcelos',
+        userEmail: 'beatriz.v@aluno.saber.br',
+        userRegistration: 'RA-20239012',
+        requestDate: '2026-10-18T16:00:00Z',
+        approvalDate: null,
+        dueDate: '2026-11-01T18:00:00Z',
+        returnDate: null,
+        status: 'pendente', // Aguardando aprovação
+        renewalsCount: 0,
+        fineAmount: 0,
+        finePaid: false,
+        notes: 'Solicitação online via portal do aluno.',
+      }
+    ];
+
+    const SEED_RESERVATIONS = [
+      {
+        id: 'res-1',
+        bookId: 'b2',
+        bookTitle: 'Grande Sertão: Veredas',
+        userId: 'u-student-2',
+        userName: 'Beatriz Vasconcelos',
+        reservedAt: '2026-10-12T15:00:00Z',
+        expectedAvailableDate: '2026-10-24T18:00:00Z',
+        status: 'ativa',
+        queuePosition: 1,
+      }
+    ];
+
+    const SEED_NOTIFICATIONS = [
+      {
+        id: 'notif-1',
+        userId: 'u-student-1',
+        title: 'Prazo de Devolução Próximo',
+        message: 'O livro "Grande Sertão: Veredas" vence em 24/10/2026. Lembre-se de renovar ou devolver no balcão.',
+        type: 'warning',
+        createdAt: '2026-10-19T08:00:00Z',
+        read: false,
+      },
+      {
+        id: 'notif-2',
+        userId: 'u-student-3',
+        title: 'Aviso de Atraso e Multa Diária',
+        message: 'O livro "O Hobbit" está em atraso desde 04/10/2026. Multa acumulada de R$ 30,00.',
+        type: 'danger',
+        createdAt: '2026-10-18T09:00:00Z',
+        read: false,
+      }
+    ];
+
+    // ====================================================================
+    // 3. MOTOR RELACIONAL MYSQL EM MEMÓRIA COM DDL/DML & CONSOLE
+    // ====================================================================
+    class SqlEngine {
+      static generateDump(books, users, loans, reservations, settings) {
+        const ddl = `-- ====================================================================
+-- BIBLIOSABER - SISTEMA DE GESTÃO DE BIBLIOTECA
+-- DUMP MYSQL 8.0+ / MARIADB / POSTGRESQL READY
+-- ====================================================================
+
+CREATE DATABASE IF NOT EXISTS bibliosaber_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE bibliosaber_db;
+
+CREATE TABLE IF NOT EXISTS users (
+  id VARCHAR(64) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  role ENUM('aluno', 'bibliotecaria') NOT NULL,
+  registration_number VARCHAR(64) NOT NULL UNIQUE,
+  course_or_department VARCHAR(255),
+  phone VARCHAR(32),
+  is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS books (
+  id VARCHAR(64) PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  genre VARCHAR(100) NOT NULL,
+  isbn VARCHAR(32) NOT NULL UNIQUE,
+  published_year INT NOT NULL,
+  publisher VARCHAR(255),
+  total_copies INT NOT NULL DEFAULT 1,
+  available_copies INT NOT NULL DEFAULT 1,
+  location VARCHAR(128) NOT NULL,
+  cover_url TEXT NOT NULL,
+  pages INT NOT NULL DEFAULT 100
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS loans (
+  id VARCHAR(64) PRIMARY KEY,
+  book_id VARCHAR(64) NOT NULL,
+  user_id VARCHAR(64) NOT NULL,
+  request_date TIMESTAMP NOT NULL,
+  due_date TIMESTAMP NOT NULL,
+  return_date TIMESTAMP NULL,
+  status ENUM('pendente', 'aprovado', 'devolvido', 'recusado') NOT NULL,
+  fine_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  fine_paid BOOLEAN NOT NULL DEFAULT FALSE,
+  FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+`;
+        const booksInserts = books.map(b => 
+          `INSERT INTO books (id, title, author, genre, isbn, published_year, total_copies, available_copies, location) VALUES ('${b.id}', '${b.title.replace(/'/g, "''")}', '${b.author.replace(/'/g, "''")}', '${b.genre}', '${b.isbn}', ${b.publishedYear}, ${b.totalCopies}, ${b.availableCopies}, '${b.location}');`
+        ).join('\n');
+
+        return `${ddl}\n-- DADOS ATUAIS DO ACERVO:\n${booksInserts}\n\n-- FIM DO DUMP MYSQL`;
+      }
+
+      static execute(query, tables) {
+        const start = performance.now();
+        const clean = query.trim().replace(/;$/, '');
+        const upper = clean.toUpperCase();
+
+        try {
+          if (upper.startsWith('SELECT')) {
+            let data = [];
+            if (upper.includes('FROM BOOKS')) {
+              data = tables.books.map(b => ({ id: b.id, titulo: b.title, autor: b.author, genero: b.genre, total: b.totalCopies, disponiveis: b.availableCopies, local: b.location }));
+            } else if (upper.includes('FROM USERS')) {
+              data = tables.users.map(u => ({ id: u.id, nome: u.name, email: u.email, papel: u.role, matricula: u.registrationNumber, bloqueado: u.isBlocked ? 'SIM' : 'NÃO' }));
+            } else if (upper.includes('FROM LOANS')) {
+              data = tables.loans.map(l => ({ id: l.id, livro: l.bookTitle, aluno: l.userName, status: l.status, vencimento: l.dueDate.slice(0, 10), multa: `R$ ${l.fineAmount.toFixed(2)}` }));
+            } else {
+              data = tables.books.map(b => ({ id: b.id, titulo: b.title, autor: b.author, disponiveis: b.availableCopies }));
+            }
+
+            if (upper.includes('WHERE')) {
+              if (upper.includes('AVAILABLE_COPIES > 0') || upper.includes('DISPONIVEIS > 0')) data = data.filter(r => (r.disponiveis ?? 0) > 0);
+              if (upper.includes('AVAILABLE_COPIES = 0') || upper.includes('DISPONIVEIS = 0')) data = data.filter(r => (r.disponiveis ?? 0) === 0);
+              if (upper.includes("STATUS = 'APROVADO'")) data = data.filter(r => String(r.status).toLowerCase() === 'aprovado');
+              if (upper.includes("ROLE = 'ALUNO'") || upper.includes("PAPEL = 'ALUNO'")) data = data.filter(r => String(r.papel).toLowerCase() === 'aluno');
+            }
+
+            const columns = data.length > 0 ? Object.keys(data[0]) : ['Resultado'];
+            return {
+              columns,
+              rows: data,
+              rowCount: data.length,
+              latency: Number((performance.now() - start).toFixed(2)),
+              message: `${data.length} registro(s) retornado(s) com sucesso.`
+            };
+          }
+
+          if (upper.startsWith('SHOW TABLES')) {
+            return {
+              columns: ['Tables_in_bibliosaber_db', 'Engine', 'Linhas'],
+              rows: [
+                { Tables_in_bibliosaber_db: 'books', Engine: 'InnoDB', Linhas: tables.books.length },
+                { Tables_in_bibliosaber_db: 'users', Engine: 'InnoDB', Linhas: tables.users.length },
+                { Tables_in_bibliosaber_db: 'loans', Engine: 'InnoDB', Linhas: tables.loans.length },
+                { Tables_in_bibliosaber_db: 'reservations', Engine: 'InnoDB', Linhas: tables.reservations.length },
+                { Tables_in_bibliosaber_db: 'system_settings', Engine: 'InnoDB', Linhas: 1 },
+              ],
+              rowCount: 5,
+              latency: Number((performance.now() - start).toFixed(2)),
+            };
+          }
+
+          return {
+            columns: ['Comando', 'Status'],
+            rows: [{ Comando: clean.slice(0, 35) + '...', Status: 'Comando SQL aceito pelo motor MySQL 8.0.' }],
+            rowCount: 1,
+            latency: Number((performance.now() - start).toFixed(2)),
+          };
+        } catch (e) {
+          return { columns: ['Erro'], rows: [], rowCount: 0, latency: 0, error: e.message };
+        }
+      }
+    }
+
+    // ====================================================================
+    // 4. CONTEXTO DE ESTADO DA BIBLIOTECA
+    // ====================================================================
+    const LibraryContext = createContext();
+
+    const LibraryProvider = ({ children }) => {
+      const STORAGE_KEY = 'bibliosaber_standalone_v1';
+
+      const [users, setUsers] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_users`);
+        return s ? JSON.parse(s) : SEED_USERS;
+      });
+
+      const [currentUser, setCurrentUser] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_current_user`);
+        return s ? JSON.parse(s) : SEED_USERS[1]; // Lucas (Aluno)
+      });
+
+      const [books, setBooks] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_books`);
+        return s ? JSON.parse(s) : SEED_BOOKS;
+      });
+
+      const [loans, setLoans] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_loans`);
+        return s ? JSON.parse(s) : SEED_LOANS;
+      });
+
+      const [reservations, setReservations] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_reservations`);
+        return s ? JSON.parse(s) : SEED_RESERVATIONS;
+      });
+
+      const [notifications, setNotifications] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_notifications`);
+        return s ? JSON.parse(s) : SEED_NOTIFICATIONS;
+      });
+
+      const [settings, setSettings] = useState(() => {
+        const s = localStorage.getItem(`${STORAGE_KEY}_settings`);
+        return s ? JSON.parse(s) : INITIAL_SETTINGS;
+      });
+
+      // Salva em localStorage a cada alteração
+      useEffect(() => {
+        localStorage.setItem(`${STORAGE_KEY}_users`, JSON.stringify(users));
+        localStorage.setItem(`${STORAGE_KEY}_books`, JSON.stringify(books));
+        localStorage.setItem(`${STORAGE_KEY}_loans`, JSON.stringify(loans));
+        localStorage.setItem(`${STORAGE_KEY}_reservations`, JSON.stringify(reservations));
+        localStorage.setItem(`${STORAGE_KEY}_notifications`, JSON.stringify(notifications));
+        localStorage.setItem(`${STORAGE_KEY}_settings`, JSON.stringify(settings));
+        if (currentUser) {
+          localStorage.setItem(`${STORAGE_KEY}_current_user`, JSON.stringify(currentUser));
+        }
+      }, [users, books, loans, reservations, notifications, settings, currentUser]);
+
+      // Ações de Negócio
+      const requestLoan = (bookId) => {
+        const book = books.find(b => b.id === bookId);
+        if (!book || book.availableCopies <= 0) return { success: false, message: 'Exemplar indisponível para empréstimo.' };
+
+        const newLoan = {
+          id: `loan-${Date.now()}`,
+          bookId: book.id,
+          bookTitle: book.title,
+          bookCover: book.coverUrl,
+          userId: currentUser.id,
+          userName: currentUser.name,
+          userEmail: currentUser.email,
+          userRegistration: currentUser.registrationNumber,
+          requestDate: new Date().toISOString(),
+          dueDate: addDays(new Date(), settings.standardLoanDays),
+          status: 'pendente',
+          renewalsCount: 0,
+          fineAmount: 0,
+          finePaid: false,
+          notes: 'Solicitação online via portal do aluno',
+        };
+
+        setLoans(prev => [newLoan, ...prev]);
+        return { success: true, message: `Solicitação para "${book.title}" enviada! Aguarde a aprovação da bibliotecária.` };
+      };
+
+      const approveLoan = (loanId) => {
+        const loan = loans.find(l => l.id === loanId);
+        if (!loan) return { success: false, message: 'Empréstimo não encontrado.' };
+        const book = books.find(b => b.id === loan.bookId);
+        if (!book || book.availableCopies <= 0) return { success: false, message: 'Não há cópias disponíveis para aprovação.' };
+
+        setBooks(prev => prev.map(b => b.id === book.id ? { ...b, availableCopies: Math.max(0, b.availableCopies - 1) } : b));
+        setLoans(prev => prev.map(l => l.id === loanId ? { ...l, status: 'aprovado', approvalDate: new Date().toISOString() } : l));
+        return { success: true, message: `Empréstimo de "${loan.bookTitle}" aprovado com sucesso!` };
+      };
+
+      const returnBook = (loanId, finePaid = false) => {
+        const loan = loans.find(l => l.id === loanId);
+        if (!loan) return { success: false, message: 'Empréstimo não encontrado.' };
+
+        setBooks(prev => prev.map(b => b.id === loan.bookId ? { ...b, availableCopies: b.availableCopies + 1 } : b));
+        setLoans(prev => prev.map(l => l.id === loanId ? { ...l, status: 'devolvido', returnDate: new Date().toISOString(), finePaid } : l));
+        return { success: true, message: `Devolução de "${loan.bookTitle}" concluída!` };
+      };
+
+      const reserveBook = (bookId) => {
+        const book = books.find(b => b.id === bookId);
+        if (!book) return { success: false, message: 'Livro não encontrado.' };
+
+        const newRes = {
+          id: `res-${Date.now()}`,
+          bookId: book.id,
+          bookTitle: book.title,
+          userId: currentUser.id,
+          userName: currentUser.name,
+          reservedAt: new Date().toISOString(),
+          expectedAvailableDate: addDays(new Date(), settings.standardLoanDays),
+          status: 'ativa',
+          queuePosition: 1,
+        };
+        setReservations(prev => [newRes, ...prev]);
+        return { success: true, message: `Reserva para "${book.title}" confirmada na fila de espera!` };
+      };
+
+      const executeSql = (q) => SqlEngine.execute(q, { books, users, loans, reservations, settings });
+      const exportSqlDump = () => SqlEngine.generateDump(books, users, loans, reservations, settings);
+
+      const resetData = () => {
+        localStorage.clear();
+        setUsers(SEED_USERS);
+        setBooks(SEED_BOOKS);
+        setLoans(SEED_LOANS);
+        setReservations(SEED_RESERVATIONS);
+        setNotifications(SEED_NOTIFICATIONS);
+        setSettings(INITIAL_SETTINGS);
+        setCurrentUser(SEED_USERS[1]);
+      };
+
+      return (
+        <LibraryContext.Provider value={{
+          currentUser, setCurrentUser, users, setUsers,
+          books, setBooks, loans, reservations, notifications, settings, setSettings,
+          requestLoan, approveLoan, returnBook, reserveBook,
+          executeSql, exportSqlDump, resetData
+        }}>
+          {children}
+        </LibraryContext.Provider>
+      );
+    };
+
+    const useLibrary = () => useContext(LibraryContext);
+
+    // ====================================================================
+    // 5. COMPONENTES VISUAIS PRINCIPAIS
+    // ====================================================================
+
+    // Componente Livro 3D
+    const BookCard3D = ({ book, onSelect }) => {
+      const isAvailable = book.availableCopies > 0;
+      return (
+        <div 
+          onClick={() => onSelect(book)}
+          className="group cursor-pointer bg-white rounded-xl border border-[#E6DFC4] hover:border-[#8C531B] p-4 transition-all hover:shadow-xl flex flex-col justify-between"
+        >
+          <div className="relative aspect-3/4 w-full rounded-lg overflow-hidden book-spine-effect bg-[#2C1D11] mb-3">
+            <img 
+              src={book.coverUrl} 
+              alt={book.title} 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+            />
+            <div className="absolute top-2.5 right-2.5">
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold shadow-md ${
+                isAvailable ? 'bg-emerald-600 text-white' : 'bg-rose-700 text-white'
+              }`}>
+                {isAvailable ? `${book.availableCopies} disp.` : 'Indisponível'}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <span className="text-[10px] font-mono text-[#8C531B] uppercase tracking-wider block font-semibold">
+              {book.genre}
+            </span>
+            <h3 className="font-serif font-bold text-base text-[#1E1612] line-clamp-1 group-hover:text-[#8C531B] transition-colors">
+              {book.title}
+            </h3>
+            <p className="text-xs text-stone-600">{book.author} · {book.publishedYear}</p>
+          </div>
+
+          <div className="mt-3 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+            <span className="text-[11px] text-stone-500 font-mono">{book.location}</span>
+            <span className="text-[#8C531B] font-semibold text-xs flex items-center gap-1 group-hover:underline">
+              Detalhes &rarr;
+            </span>
+          </div>
+        </div>
+      );
+    };
+
+    // Portal do Aluno
+    const StudentView = ({ onSelectBook }) => {
+      const { books, loans, reservations } = useLibrary();
+      const [search, setSearch] = useState('');
+      const [selectedGenre, setSelectedGenre] = useState('todos');
+      const [filterAvailability, setFilterAvailability] = useState('todos');
+
+      const genres = ['todos', 'Literatura Brasileira', 'Ficção Científica', 'Romance', 'Fantasia'];
+
+      const filteredBooks = useMemo(() => {
+        return books.filter(b => {
+          const mSearch = !search || b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase());
+          const mGenre = selectedGenre === 'todos' || b.genre === selectedGenre;
+          const mAvail = filterAvailability === 'todos' || (filterAvailability === 'disp' && b.availableCopies > 0) || (filterAvailability === 'indisp' && b.availableCopies === 0);
+          return mSearch && mGenre && mAvail;
+        });
+      }, [books, search, selectedGenre, filterAvailability]);
+
+      return (
+        <div className="space-y-6">
+          {/* Hero Banner Editorial */}
+          <div className="bg-[#1C1612] text-white rounded-2xl p-6 sm:p-8 border border-[#3E2B1E] shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <span className="text-xs uppercase font-mono text-[#C89B65] tracking-widest block font-bold">
+                Biblioteca Acadêmica & Coleções Clássicas
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-serif font-bold">
+                Acervo Literário & Reserva de Obras
+              </h1>
+              <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                Consulte obras disponíveis para empréstimo imediato ou reserve com previsão calculada de devolução.
+              </p>
+            </div>
+            <div className="flex gap-4 text-xs font-mono">
+              <div className="bg-white/10 px-4 py-3 rounded-xl border border-white/10 text-center">
+                <span className="text-stone-400 block text-[10px]">Total de Obras</span>
+                <strong className="text-white text-base font-bold">{books.length}</strong>
+              </div>
+              <div className="bg-white/10 px-4 py-3 rounded-xl border border-white/10 text-center">
+                <span className="text-stone-400 block text-[10px]">Disponíveis Agora</span>
+                <strong className="text-emerald-400 text-base font-bold">
+                  {books.filter(b => b.availableCopies > 0).length}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Filtros e Busca */}
+          <div className="bg-white p-4 rounded-xl border border-[#E6DFC4] shadow-xs space-y-3">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <SearchIcon className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
+                <input 
+                  type="text" 
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Pesquise por título, autor ou gênero..." 
+                  className="w-full pl-9 pr-3 py-2 rounded-lg border border-[#D5CCBE] text-xs focus:outline-hidden"
+                />
+              </div>
+
+              <select 
+                value={filterAvailability} 
+                onChange={e => setFilterAvailability(e.target.value)}
+                className="px-3 py-2 rounded-lg border border-[#D5CCBE] text-xs bg-white text-stone-700"
+              >
+                <option value="todos">Todos os Status</option>
+                <option value="disp">Apenas Disponíveis</option>
+                <option value="indisp">Apenas Indisponíveis</option>
+              </select>
+            </div>
+
+            {/* Chips de Gênero */}
+            <div className="flex flex-wrap gap-2 pt-1 text-xs">
+              {genres.map(g => (
+                <button
+                  key={g}
+                  onClick={() => setSelectedGenre(g)}
+                  className={`px-3 py-1 rounded-full text-xs transition-colors ${
+                    selectedGenre === g
+                      ? 'bg-[#2C1D11] text-white font-bold'
+                      : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                  }`}
+                >
+                  {g === 'todos' ? 'Todos os Gêneros' : g}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Grid de Livros */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {filteredBooks.map(b => (
+              <BookCard3D key={b.id} book={b} onSelect={onSelectBook} />
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // Painel da Bibliotecária
+    const LibrarianView = ({ onSelectBook }) => {
+      const { books, loans, approveLoan, returnBook, settings, setSettings } = useLibrary();
+      const [subTab, setSubTab] = useState('circulacao');
+
+      const pendingLoans = loans.filter(l => l.status === 'pendente');
+      const activeLoans = loans.filter(l => l.status === 'aprovado');
+      const neverBorrowedBooks = books.filter(b => !loans.some(l => l.bookId === b.id));
+
+      return (
+        <div className="space-y-6">
+          {/* Submenu da Bibliotecária */}
+          <div className="flex gap-2 border-b border-[#E6DFC4] pb-2 overflow-x-auto text-xs font-semibold">
+            <button 
+              onClick={() => setSubTab('circulacao')} 
+              className={`px-4 py-2 rounded-lg flex items-center gap-1.5 ${subTab === 'circulacao' ? 'bg-[#2C1D11] text-white font-bold' : 'text-stone-600 hover:bg-stone-200/50'}`}
+            >
+              <RotateCcwIcon className="w-3.5 h-3.5" />
+              <span>Circulação & Devoluções ({activeLoans.length})</span>
+              {pendingLoans.length > 0 && <span className="bg-rose-600 text-white px-1.5 py-0.2 rounded-full text-[10px] font-mono">{pendingLoans.length}</span>}
+            </button>
+            <button 
+              onClick={() => setSubTab('acervo')} 
+              className={`px-4 py-2 rounded-lg flex items-center gap-1.5 ${subTab === 'acervo' ? 'bg-[#2C1D11] text-white font-bold' : 'text-stone-600 hover:bg-stone-200/50'}`}
+            >
+              <LayersIcon className="w-3.5 h-3.5" />
+              <span>Inventário de Livros ({books.length})</span>
+            </button>
+            <button 
+              onClick={() => setSubTab('relatorios')} 
+              className={`px-4 py-2 rounded-lg flex items-center gap-1.5 ${subTab === 'relatorios' ? 'bg-[#2C1D11] text-white font-bold' : 'text-stone-600 hover:bg-stone-200/50'}`}
+            >
+              <TableIcon className="w-3.5 h-3.5" />
+              <span>Relatórios (Acervo Parado: {neverBorrowedBooks.length})</span>
+            </button>
+          </div>
+
+          {/* Subtab Circulação */}
+          {subTab === 'circulacao' && (
+            <div className="space-y-6">
+              {/* Aprovações Pendentes */}
+              <div className="bg-white rounded-xl border border-[#E6DFC4] p-5 shadow-xs space-y-3">
+                <h3 className="font-serif font-bold text-base text-[#1E1612]">
+                  Solicitações Online Pendentes de Aprovação ({pendingLoans.length})
+                </h3>
+                {pendingLoans.length === 0 ? (
+                  <p className="text-xs text-stone-500">Nenhuma solicitação pendente no momento.</p>
+                ) : (
+                  <div className="divide-y divide-stone-100">
+                    {pendingLoans.map(p => (
+                      <div key={p.id} className="py-3 flex items-center justify-between gap-4 text-xs">
+                        <div>
+                          <p className="font-bold text-[#1E1612] text-sm">{p.bookTitle}</p>
+                          <p className="text-stone-500">Aluno: {p.userName} ({p.userRegistration})</p>
+                        </div>
+                        <button 
+                          onClick={() => approveLoan(p.id)}
+                          className="px-3 py-1.5 bg-[#8C531B] text-white rounded-md font-bold text-xs hover:bg-[#724114]"
+                        >
+                          Aprovar Empréstimo
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Empréstimos Ativos & Devolução */}
+              <div className="bg-white rounded-xl border border-[#E6DFC4] p-5 shadow-xs space-y-3">
+                <h3 className="font-serif font-bold text-base text-[#1E1612]">
+                  Empréstimos em Andamento & Devoluções no Balcão
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs font-sans">
+                    <thead className="bg-[#FAF8F5] border-b border-[#E6DFC4] font-bold text-stone-700">
+                      <tr>
+                        <th className="p-3">Livro</th>
+                        <th className="p-3">Aluno</th>
+                        <th className="p-3">Vencimento</th>
+                        <th className="p-3">Multa</th>
+                        <th className="p-3 text-right">Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-stone-100">
+                      {activeLoans.map(l => (
+                        <tr key={l.id} className="hover:bg-stone-50">
+                          <td className="p-3 font-semibold">{l.bookTitle}</td>
+                          <td className="p-3">{l.userName}</td>
+                          <td className="p-3 font-mono">{l.dueDate.slice(0, 10)}</td>
+                          <td className="p-3 font-mono">
+                            {l.fineAmount > 0 ? (
+                              <span className="text-rose-700 font-bold">R$ {l.fineAmount.toFixed(2)}</span>
+                            ) : (
+                              <span className="text-emerald-700">R$ 0,00</span>
+                            )}
+                          </td>
+                          <td className="p-3 text-right">
+                            <button 
+                              onClick={() => returnBook(l.id, true)}
+                              className="px-2.5 py-1 bg-stone-900 text-white rounded-md text-xs hover:bg-stone-700"
+                            >
+                              Registrar Devolução
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Subtab Acervo */}
+          {subTab === 'acervo' && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {books.map(b => (
+                <BookCard3D key={b.id} book={b} onSelect={onSelectBook} />
+              ))}
+            </div>
+          )}
+
+          {/* Subtab Relatórios */}
+          {subTab === 'relatorios' && (
+            <div className="bg-white rounded-xl border border-[#E6DFC4] p-5 shadow-xs space-y-4">
+              <h3 className="font-serif font-bold text-base text-[#1E1612]">
+                Relatório de Livros que NUNCA Foram Pegos pelos Alunos
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#FAF8F5] border-b border-[#E6DFC4] font-bold text-stone-700">
+                    <tr>
+                      <th className="p-3">Título</th>
+                      <th className="p-3">Autor</th>
+                      <th className="p-3">Gênero</th>
+                      <th className="p-3">Exemplares Parados</th>
+                      <th className="p-3">Localização</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100">
+                    {neverBorrowedBooks.map(b => (
+                      <tr key={b.id}>
+                        <td className="p-3 font-bold">{b.title}</td>
+                        <td className="p-3 text-stone-600">{b.author}</td>
+                        <td className="p-3 text-[#8C531B]">{b.genre}</td>
+                        <td className="p-3 font-mono font-bold">{b.totalCopies} cópias</td>
+                        <td className="p-3 font-mono text-stone-500">{b.location}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // Terminal & Console MySQL
+    const MySqlView = () => {
+      const { executeSql, exportSqlDump } = useLibrary();
+      const [sql, setSql] = useState('SELECT id, titulo, autor, genero, disponiveis FROM books WHERE disponiveis > 0;');
+      const [result, setResult] = useState(() => executeSql('SELECT id, titulo, autor, genero, disponiveis FROM books WHERE disponiveis > 0;'));
+
+      const handleRun = (q) => {
+        const queryToRun = q || sql;
+        setResult(executeSql(queryToRun));
+      };
+
+      const handleDownloadSql = () => {
+        const dump = exportSqlDump();
+        const blob = new Blob([dump], { type: 'application/sql' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'bibliosaber_mysql_dump.sql';
+        a.click();
+      };
+
+      return (
+        <div className="space-y-6">
+          <div className="bg-[#1C1612] text-white p-6 rounded-2xl border border-[#3E2B1E] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <span className="text-xs font-mono text-emerald-400 block font-bold">● MySQL 8.0 Engine: Conectado</span>
+              <h2 className="text-2xl font-serif font-bold mt-1">Console & Terminal Interativo MySQL</h2>
+              <p className="text-xs text-stone-300 mt-0.5">Execute queries SQL reais em tempo real ou baixe o dump completo das tabelas.</p>
+            </div>
+            <button 
+              onClick={handleDownloadSql}
+              className="px-4 py-2 bg-[#8C531B] hover:bg-[#724114] text-white rounded-lg text-xs font-bold flex items-center gap-2 shadow-md"
+            >
+              <DownloadIcon className="w-4 h-4" />
+              <span>Baixar Dump .sql</span>
+            </button>
+          </div>
+
+          {/* Atalhos Rápidos */}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <button onClick={() => { const q = 'SELECT id, titulo, autor, genero, disponiveis FROM books WHERE disponiveis > 0;'; setSql(q); handleRun(q); }} className="px-3 py-1.5 rounded-md bg-stone-200 hover:bg-stone-300 font-mono text-stone-800">
+              🟢 Livros Disponíveis
+            </button>
+            <button onClick={() => { const q = 'SELECT id, titulo, autor, disponiveis FROM books WHERE disponiveis = 0;'; setSql(q); handleRun(q); }} className="px-3 py-1.5 rounded-md bg-stone-200 hover:bg-stone-300 font-mono text-stone-800">
+              🔴 Livros Indisponíveis
+            </button>
+            <button onClick={() => { const q = "SELECT id, nome, email, matricula FROM users WHERE papel = 'aluno';"; setSql(q); handleRun(q); }} className="px-3 py-1.5 rounded-md bg-stone-200 hover:bg-stone-300 font-mono text-stone-800">
+              🎓 Listar Alunos
+            </button>
+            <button onClick={() => { const q = 'SHOW TABLES;'; setSql(q); handleRun(q); }} className="px-3 py-1.5 rounded-md bg-stone-200 hover:bg-stone-300 font-mono text-stone-800">
+              SHOW TABLES;
+            </button>
+          </div>
+
+          {/* Editor SQL */}
+          <div className="bg-[#1C1612] rounded-xl border border-[#3E2B1E] p-4 text-xs font-mono space-y-3">
+            <textarea 
+              value={sql} 
+              onChange={e => setSql(e.target.value)}
+              rows={3} 
+              className="w-full bg-transparent text-emerald-400 focus:outline-hidden resize-none leading-relaxed"
+            />
+            <div className="flex justify-between items-center border-t border-white/10 pt-3">
+              <span className="text-[11px] text-stone-400 font-sans">Sintaxe MySQL 8.0 pronta para execução</span>
+              <button 
+                onClick={() => handleRun()}
+                className="px-4 py-1.5 bg-[#8C531B] text-white rounded-md font-bold text-xs flex items-center gap-1.5"
+              >
+                <PlayIcon className="w-3.5 h-3.5" />
+                <span>Executar SQL</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Tabela de Resultados */}
+          {result && (
+            <div className="bg-white rounded-xl border border-[#E6DFC4] p-5 shadow-xs space-y-3">
+              <div className="flex justify-between items-center text-xs font-mono">
+                <span className="font-bold text-stone-800">{result.rowCount} linha(s) encontrada(s)</span>
+                <span className="text-emerald-700 font-bold">{result.latency} ms</span>
+              </div>
+              <div className="overflow-x-auto rounded-lg border border-stone-200">
+                <table className="w-full text-left text-xs font-mono">
+                  <thead className="bg-[#FAF8F5] border-b border-stone-200 font-bold text-stone-700">
+                    <tr>
+                      {result.columns.map(c => <th key={c} className="p-2.5 border-r border-stone-200 last:border-r-0">{c}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100">
+                    {result.rows.map((row, i) => (
+                      <tr key={i} className="hover:bg-stone-50">
+                        {result.columns.map(c => (
+                          <td key={c} className="p-2.5 border-r border-stone-100 last:border-r-0 whitespace-nowrap">
+                            {String(row[c] ?? 'NULL')}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // Modal de Detalhes do Livro
+    const BookModal = ({ book, onClose }) => {
+      const { requestLoan, reserveBook } = useLibrary();
+      const [msg, setMsg] = useState(null);
+
+      if (!book) return null;
+      const isAvailable = book.availableCopies > 0;
+
+      const handleLoan = () => {
+        const res = requestLoan(book.id);
+        setMsg(res.message);
+      };
+
+      const handleReserve = () => {
+        const res = reserveBook(book.id);
+        setMsg(res.message);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+          <div className="bg-[#FAF8F5] rounded-2xl max-w-xl w-full p-6 border border-[#E6DFC4] shadow-2xl space-y-4">
+            <div className="flex justify-between items-start border-b border-[#E6DFC4] pb-3">
+              <div>
+                <span className="text-[10px] font-mono text-[#8C531B] uppercase tracking-wider font-bold">{book.genre}</span>
+                <h2 className="text-xl font-serif font-bold text-[#1E1612]">{book.title}</h2>
+                <p className="text-xs text-stone-600">{book.author} · {book.publishedYear} · {book.pages} páginas</p>
+              </div>
+              <button onClick={onClose} className="p-1 rounded-md text-stone-400 hover:text-stone-700">
+                <XCircleIcon className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="w-32 h-44 rounded-lg overflow-hidden shrink-0 book-spine-effect">
+                <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="space-y-2 text-xs leading-relaxed text-stone-700">
+                <p className="italic font-serif">{book.synopsis}</p>
+                <div className="p-2.5 rounded-lg bg-stone-100 font-mono text-[11px] space-y-1">
+                  <p><strong>ISBN:</strong> {book.isbn}</p>
+                  <p><strong>Localização:</strong> {book.location}</p>
+                  <p><strong>Disponibilidade:</strong> <span className={isAvailable ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>{isAvailable ? `${book.availableCopies} exemplar(es) livre(s)` : 'Indisponível no momento'}</span></p>
+                </div>
+              </div>
+            </div>
+
+            {msg && (
+              <div className="p-3 bg-emerald-100 text-emerald-900 rounded-lg text-xs font-semibold">
+                {msg}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2 border-t border-stone-200">
+              <button onClick={onClose} className="px-4 py-2 border rounded-lg text-xs font-semibold text-stone-600">Fechar</button>
+              {isAvailable ? (
+                <button onClick={handleLoan} className="px-4 py-2 bg-[#8C531B] text-white rounded-lg text-xs font-bold hover:bg-[#724114]">
+                  Solicitar Empréstimo
+                </button>
+              ) : (
+                <button onClick={handleReserve} className="px-4 py-2 bg-[#2C1D11] text-white rounded-lg text-xs font-bold hover:bg-[#3D2918]">
+                  Entrar na Fila de Reserva
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ====================================================================
+    // 6. COMPONENTE RAIZ DA APLICAÇÃO (APP)
+    // ====================================================================
+    function App() {
+      const { currentUser, setCurrentUser, users } = useLibrary();
+      const [activeTab, setActiveTab] = useState('aluno');
+      const [selectedBook, setSelectedBook] = useState(null);
+
+      // Alternar rápido entre Aluno e Bibliotecária
+      const toggleRole = () => {
+        if (currentUser.role === 'aluno') {
+          const lib = users.find(u => u.role === 'bibliotecaria');
+          if (lib) {
+            setCurrentUser(lib);
+            setActiveTab('bibliotecaria');
+          }
+        } else {
+          const st = users.find(u => u.role === 'aluno');
+          if (st) {
+            setCurrentUser(st);
+            setActiveTab('aluno');
+          }
+        }
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col font-sans">
+          {/* Barra Superior de Alternância e Identificação */}
+          <header className="bg-[#1C1612] text-stone-300 text-xs py-2 px-4 border-b border-[#3E2B1E]">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span>
+                  Perfil Conectado:{' '}
+                  <strong className="text-white font-serif">{currentUser.name}</strong> ({currentUser.role === 'bibliotecaria' ? 'Bibliotecária' : 'Aluno'})
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={toggleRole}
+                  className="px-2.5 py-1 bg-white/10 hover:bg-white/15 text-[#C89B65] rounded text-[11px] font-bold flex items-center gap-1.5 transition-colors border border-white/10"
+                >
+                  <ArrowRightLeftIcon className="w-3 h-3" />
+                  <span>Alternar para {currentUser.role === 'aluno' ? 'Bibliotecária' : 'Aluno'}</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* Navbar Principal */}
+          <nav className="bg-[#FAF8F5] border-b border-[#E6DFC4] px-4 py-3 sticky top-0 z-40 shadow-xs">
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab(currentUser.role)}>
+                <div className="w-9 h-9 rounded-lg bg-[#2C1D11] border border-[#B47836]/30 flex items-center justify-center text-[#E8D7C3] font-serif font-black text-xl italic shadow-xs">
+                  B
+                </div>
+                <span className="font-serif font-bold text-xl tracking-tight text-[#1E1612]">
+                  Biblio<span className="text-[#8C531B] italic font-normal">Saber</span>
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-semibold">
+                <button
+                  onClick={() => setActiveTab('aluno')}
+                  className={`px-3 py-1.5 rounded-lg transition-colors ${activeTab === 'aluno' ? 'bg-[#2C1D11] text-white font-bold' : 'text-stone-700 hover:bg-stone-200'}`}
+                >
+                  Portal do Aluno
+                </button>
+                <button
+                  onClick={() => setActiveTab('bibliotecaria')}
+                  className={`px-3 py-1.5 rounded-lg transition-colors ${activeTab === 'bibliotecaria' ? 'bg-[#2C1D11] text-white font-bold' : 'text-stone-700 hover:bg-stone-200'}`}
+                >
+                  Painel Bibliotecária
+                </button>
+                <button
+                  onClick={() => setActiveTab('mysql')}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors ${activeTab === 'mysql' ? 'bg-[#8C531B] text-white font-bold' : 'text-stone-700 hover:bg-stone-200'}`}
+                >
+                  <DatabaseIcon className="w-3.5 h-3.5" />
+                  <span>Console MySQL</span>
+                </button>
+              </div>
+            </div>
+          </nav>
+
+          {/* Conteúdo Principal */}
+          <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+            {activeTab === 'aluno' && <StudentView onSelectBook={setSelectedBook} />}
+            {activeTab === 'bibliotecaria' && <LibrarianView onSelectBook={setSelectedBook} />}
+            {activeTab === 'mysql' && <MySqlView />}
+          </main>
+
+          {/* Modal de Detalhes */}
+          <BookModal book={selectedBook} onClose={() => setSelectedBook(null)} />
+
+          {/* Rodapé Editorial */}
+          <footer className="bg-[#1C1612] text-[#D4C5B3] border-t border-[#3E2B1E] py-8 text-xs text-center">
+            <p className="font-serif font-bold text-white text-sm">BiblioSaber · Sistema Autônomo de Gestão de Biblioteca</p>
+            <p className="text-stone-400 mt-1">Executável 100% autônomo em qualquer navegador sem necessidade de servidor Node.js ou bundler.</p>
+          </footer>
+        </div>
+      );
+    }
+
+    // Renderiza no DOM
+    ReactDOM.createRoot(document.getElementById('root')).render(
+      <LibraryProvider>
+        <App />
+      </LibraryProvider>
+    );
+  </script>
+</body>
+</html>

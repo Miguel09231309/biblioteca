@@ -18,6 +18,7 @@ import {
   BookOpen,
   ArrowRightLeft,
   Database,
+  Download,
 } from 'lucide-react';
 
 function LibraryAppContent() {
@@ -72,6 +73,15 @@ function LibraryAppContent() {
           </div>
 
           <div className="flex items-center gap-3">
+            <a
+              href="/api/download-standalone"
+              download="index.html"
+              className="px-2.5 py-1 rounded-sm bg-[#8C531B] hover:bg-[#A86422] text-white font-semibold text-[11px] flex items-center gap-1.5 transition-colors shadow-xs"
+              title="Baixar arquivo index.html único autônomo para rodar direto no navegador sem servidor"
+            >
+              <Download className="w-3 h-3 text-[#E8D7C3]" />
+              <span>Baixar index.html Único</span>
+            </a>
             <button
               onClick={() => setActiveTab('sql-database')}
               className={`px-2.5 py-1 rounded-sm text-[11px] font-semibold flex items-center gap-1.5 transition-colors border ${

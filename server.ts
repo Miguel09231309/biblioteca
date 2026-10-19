@@ -317,6 +317,15 @@ app.post('/api/mysql/sync', async (req: Request, res: Response) => {
   }
 });
 
+// Servir e Baixar Versão Autônoma em Arquivo Único (index.html)
+app.get('/standalone', (req: Request, res: Response) => {
+  res.sendFile(path.resolve(__dirname, 'standalone.html'));
+});
+
+app.get('/api/download-standalone', (req: Request, res: Response) => {
+  res.download(path.resolve(__dirname, 'standalone.html'), 'index.html');
+});
+
 // ==========================================
 // VITE / STATIC SERVING
 // ==========================================
