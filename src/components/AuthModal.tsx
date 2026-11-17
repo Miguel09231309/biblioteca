@@ -148,7 +148,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-[#FAF8F5] rounded-2xl shadow-2xl border border-[#E6DFC4] w-full max-w-lg overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="p-5 sm:p-6 bg-[#2C1D11] text-[#FAF8F5] relative">
+        <div className="p-5 sm:p-6 bg-[#2D0B10] text-[#FAF8F5] relative">
           <button
             onClick={onClose}
             className="absolute top-5 right-5 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
@@ -194,7 +194,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
             }}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
               activeRole === 'bibliotecaria'
-                ? 'bg-white text-amber-900 shadow-xs border border-amber-200'
+                ? 'bg-white text-[#4A121A] shadow-xs border border-amber-200'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
             }`}
           >
@@ -213,7 +213,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
             }}
             className={`pb-1 transition-colors ${
               authMode === 'register'
-                ? 'text-amber-800 border-b-2 border-amber-800 font-bold'
+                ? 'text-[#681A24] border-b-2 border-[#681A24] font-bold'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -227,7 +227,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
             }}
             className={`pb-1 transition-colors ${
               authMode === 'login'
-                ? 'text-amber-800 border-b-2 border-amber-800 font-bold'
+                ? 'text-[#681A24] border-b-2 border-[#681A24] font-bold'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -265,7 +265,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                     value={loginIdentifier}
                     onChange={(e) => setLoginIdentifier(e.target.value)}
                     placeholder="ex: lucas.silveira@aluno... ou 2024-ENG-0412"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-[#681A24]"
                     required
                   />
                 </div>
@@ -281,14 +281,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                     type="password"
                     placeholder="••••••••"
                     defaultValue="123456"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-[#681A24]"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 px-4 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-semibold text-sm shadow-md transition-colors"
+                className="w-full py-2.5 px-4 rounded-xl bg-[#681A24] hover:bg-[#4A121A] text-white font-semibold text-sm shadow-md transition-colors"
               >
                 Entrar no Sistema
               </button>
@@ -403,7 +403,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
           ) : (
             /* Librarian Registration Form */
             <form onSubmit={handleLibrarianRegister} className="space-y-3.5">
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-relaxed">
+              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-[#4A121A] leading-relaxed">
                 <strong>Atenção:</strong> O cadastro da bibliotecária concede privilégios administrativos totais para gerenciar inventário, aprovar empréstimos e registrar devoluções. É necessário o código institucional.
               </div>
 
@@ -419,7 +419,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                     value={librarianForm.name}
                     onChange={(e) => setLibrarianForm({ ...librarianForm, name: e.target.value })}
                     placeholder="Ex: Profa. Mariana Albuquerque"
-                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-[#681A24]"
                   />
                 </div>
               </div>
@@ -435,7 +435,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                     value={librarianForm.registrationNumber}
                     onChange={(e) => setLibrarianForm({ ...librarianForm, registrationNumber: e.target.value })}
                     placeholder="Ex: BIB-9921"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-[#681A24]"
                   />
                 </div>
 
@@ -451,7 +451,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                       value={librarianForm.accessCode}
                       onChange={(e) => setLibrarianForm({ ...librarianForm, accessCode: e.target.value })}
                       placeholder="BIBLIO2026"
-                      className="w-full pl-9 pr-3 py-2 rounded-xl border border-amber-300 bg-amber-50/50 text-xs sm:text-sm font-mono font-bold text-amber-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+                      className="w-full pl-9 pr-3 py-2 rounded-xl border border-amber-300 bg-amber-50/50 text-xs sm:text-sm font-mono font-bold text-[#4A121A] focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-[#681A24]"
                     />
                   </div>
                   <span className="text-[10px] text-slate-700 mt-0.5 block">
@@ -472,14 +472,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                     value={librarianForm.email}
                     onChange={(e) => setLibrarianForm({ ...librarianForm, email: e.target.value })}
                     placeholder="biblioteca@saberviva.edu.br"
-                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-600"
+                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-[#681A24]"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 px-4 rounded-xl bg-amber-800 hover:bg-amber-900 text-white font-semibold text-sm shadow-md transition-colors"
+                className="w-full py-2.5 px-4 rounded-xl bg-[#681A24] hover:bg-[#4A121A] text-white font-semibold text-sm shadow-md transition-colors"
               >
                 Cadastrar Bibliotecária
               </button>
@@ -509,8 +509,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, defaultRo
                 onClick={() => quickLoginAs('user-lib-1')}
                 className="p-2 rounded-xl border border-amber-200 bg-amber-50/50 hover:bg-amber-100 text-left transition-colors"
               >
-                <p className="text-xs font-bold text-amber-900">Dra. Helena Martins</p>
-                <p className="text-[10px] text-amber-800">Bibliotecária-Chefe</p>
+                <p className="text-xs font-bold text-[#4A121A]">Dra. Helena Martins</p>
+                <p className="text-[10px] text-[#681A24]">Bibliotecária-Chefe</p>
               </button>
             </div>
           </div>

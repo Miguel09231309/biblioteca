@@ -212,16 +212,17 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
       )}
 
       {/* Editorial Administrative Header Banner */}
-      <section className="bg-[#241A12] rounded-2xl text-[#FAF8F5] p-8 border border-[#3E2B1E] shadow-lg">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <section className="bg-[#2D0B10] rounded-2xl text-[#FAF8F5] p-8 border border-[#4A121A] shadow-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#C99757]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <span className="text-xs uppercase tracking-widest text-[#C89B65] font-sans block">
+            <span className="text-xs uppercase tracking-widest text-[#E5B869] font-mono font-bold block">
               Gabinete da Bibliotecária & Gestão de Acervo
             </span>
             <h1 className="text-2xl sm:text-4xl font-serif font-bold text-white tracking-tight">
               Circulação, Inventário & Banco Relacional SQL
             </h1>
-            <p className="text-xs sm:text-sm text-[#D4C5B3] max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-stone-300 max-w-2xl leading-relaxed font-sans">
               Supervisão de exemplares físicos, aprovação de empréstimos, controle de devoluções com multas diárias configuráveis e consultas SQL em tempo real.
             </p>
           </div>
@@ -232,9 +233,9 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                 setBookToEdit(null);
                 setIsBookModalOpen(true);
               }}
-              className="px-4 py-2.5 rounded-lg bg-[#8C531B] hover:bg-[#724114] text-white font-medium text-xs shadow-xs transition-colors flex items-center gap-2"
+              className="px-4 py-2.5 rounded-lg bg-[#681A24] hover:bg-[#7D202C] text-white font-medium text-xs shadow-md transition-colors flex items-center gap-2 border border-[#C99757]/30"
             >
-              <BookPlus className="w-4 h-4" />
+              <BookPlus className="w-4 h-4 text-[#E5B869]" />
               <span>Cadastrar Novo Livro</span>
             </button>
             <button
@@ -297,11 +298,11 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           onClick={() => setActiveTab('circulacao')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'circulacao'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
-          <RotateCcw className="w-4 h-4 text-[#8C531B]" />
+          <RotateCcw className="w-4 h-4 text-[#681A24]" />
           <span>Circulação & Balcão</span>
           {pendingLoans.length > 0 && (
             <span className="font-mono text-xs px-1.5 py-0.2 bg-[#8C2424] text-white rounded-full font-bold">
@@ -314,11 +315,11 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           onClick={() => setActiveTab('inventario')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'inventario'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
-          <Layers className="w-4 h-4 text-[#8C531B]" />
+          <Layers className="w-4 h-4 text-[#681A24]" />
           <span>Inventário do Acervo ({books.length})</span>
         </button>
 
@@ -326,11 +327,11 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           onClick={() => setActiveTab('relatorios')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'relatorios'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
-          <PieChart className="w-4 h-4 text-[#8C531B]" />
+          <PieChart className="w-4 h-4 text-[#681A24]" />
           <span>Relatórios Analíticos</span>
         </button>
 
@@ -338,11 +339,11 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           onClick={() => setActiveTab('sql-database')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'sql-database'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
-          <Database className="w-4 h-4 text-[#8C531B]" />
+          <Database className="w-4 h-4 text-[#681A24]" />
           <span>Banco de Dados SQL (MySQL)</span>
         </button>
 
@@ -350,11 +351,11 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           onClick={() => setActiveTab('alunos')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'alunos'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
-          <Users className="w-4 h-4 text-[#8C531B]" />
+          <Users className="w-4 h-4 text-[#681A24]" />
           <span>Alunos ({users.filter((u) => u.role === 'aluno').length})</span>
         </button>
 
@@ -362,11 +363,11 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           onClick={() => setActiveTab('configuracoes')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'configuracoes'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
-          <SettingsIcon className="w-4 h-4 text-[#8C531B]" />
+          <SettingsIcon className="w-4 h-4 text-[#681A24]" />
           <span>Políticas & Multas</span>
         </button>
       </div>
@@ -379,7 +380,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           {/* Pendentes */}
           <div className="space-y-4">
             <h3 className="font-serif font-bold text-lg text-[#1E1612] flex items-center gap-2">
-              <Inbox className="w-5 h-5 text-[#8C531B]" />
+              <Inbox className="w-5 h-5 text-[#681A24]" />
               <span>Solicitações de Empréstimo Pendentes ({pendingLoans.length})</span>
             </h3>
 
@@ -430,7 +431,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                             <button
                               onClick={() => handleApprove(loan.id)}
                               disabled={!hasCopies}
-                              className="px-3 py-1.5 rounded-md bg-[#2C1D11] hover:bg-[#3D2918] disabled:bg-stone-300 text-white text-xs font-semibold"
+                              className="px-3 py-1.5 rounded-md bg-[#2D0B10] hover:bg-[#4A121A] disabled:bg-stone-300 text-white text-xs font-semibold"
                             >
                               Aprovar
                             </button>
@@ -449,7 +450,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h3 className="font-serif font-bold text-lg text-[#1E1612] flex items-center gap-2">
-                  <RotateCcw className="w-5 h-5 text-[#8C531B]" />
+                  <RotateCcw className="w-5 h-5 text-[#681A24]" />
                   <span>Livros em Posse dos Alunos ({activeLoans.length})</span>
                 </h3>
                 <p className="text-xs text-stone-500">
@@ -464,7 +465,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                   value={circSearch}
                   onChange={(e) => setCircSearch(e.target.value)}
                   placeholder="Buscar aluno ou título..."
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-[#D5CCBE] bg-white text-xs focus:outline-hidden focus:border-[#8C531B]"
+                  className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-[#D5CCBE] bg-white text-xs focus:outline-hidden focus:border-[#681A24]"
                 />
               </div>
             </div>
@@ -514,7 +515,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
 
                             <td className="p-3.5">
                               <p className="font-semibold text-[#1E1612]">{l.userName}</p>
-                              <p className="text-[11px] font-mono text-[#8C531B]">{l.userRegistration}</p>
+                              <p className="text-[11px] font-mono text-[#681A24]">{l.userRegistration}</p>
                             </td>
 
                             <td className="p-3.5 text-stone-600 font-mono">
@@ -534,7 +535,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                                   Atrasado · Multa: R$ {l.fineAmount.toFixed(2)}
                                 </span>
                               ) : diffDays <= 2 ? (
-                                <span className="text-amber-800 font-medium">Vence em breve</span>
+                                <span className="text-[#681A24] font-medium">Vence em breve</span>
                               ) : (
                                 <span className="text-emerald-800 font-medium">No prazo</span>
                               )}
@@ -547,7 +548,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                                   setReturnFinePaid(true);
                                   setReturnNotes('');
                                 }}
-                                className="px-3 py-1.5 rounded-md bg-[#2C1D11] hover:bg-[#3D2918] text-white text-xs font-medium"
+                                className="px-3 py-1.5 rounded-md bg-[#2D0B10] hover:bg-[#4A121A] text-white text-xs font-medium"
                               >
                                 Registrar Devolução
                               </button>
@@ -587,7 +588,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                   setBookToEdit(null);
                   setIsBookModalOpen(true);
                 }}
-                className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white text-xs font-semibold flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white text-xs font-semibold flex items-center justify-center gap-2"
               >
                 <BookPlus className="w-4 h-4" />
                 <span>Adicionar Obra ao Acervo</span>
@@ -671,7 +672,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                             />
                             <div>
                               <p
-                                className="font-serif font-bold text-sm text-[#1E1612] hover:text-[#8C531B] cursor-pointer"
+                                className="font-serif font-bold text-sm text-[#1E1612] hover:text-[#681A24] cursor-pointer"
                                 onClick={() => onOpenBookDetail(book)}
                               >
                                 {book.title}
@@ -683,7 +684,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                         </td>
 
                         <td className="p-3.5">
-                          <span className="text-[#8C531B] font-medium block">{book.genre}</span>
+                          <span className="text-[#681A24] font-medium block">{book.genre}</span>
                           <span className="text-[10px] font-mono text-stone-500">{book.isbn}</span>
                         </td>
 
@@ -755,7 +756,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-serif font-bold text-[#1E1612] flex items-center gap-2">
-                <Database className="w-5 h-5 text-[#8C531B]" />
+                <Database className="w-5 h-5 text-[#681A24]" />
                 <span>Console SQL Relacional & Exportador MySQL / PostgreSQL</span>
               </h2>
               <p className="text-xs text-stone-500">
@@ -766,7 +767,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
             <div className="flex gap-2.5">
               <button
                 onClick={handleExportSqlDump}
-                className="px-4 py-2 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-2 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Baixar Script MySQL (.sql)</span>
@@ -829,7 +830,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                 />
                 <button
                   onClick={handleRunSql}
-                  className="px-5 rounded-lg bg-[#8C531B] hover:bg-[#724114] text-white text-xs font-bold flex flex-col items-center justify-center gap-1 shrink-0"
+                  className="px-5 rounded-lg bg-[#681A24] hover:bg-[#4A121A] text-white text-xs font-bold flex flex-col items-center justify-center gap-1 shrink-0"
                 >
                   <Play className="w-4 h-4" />
                   <span>Executar</span>
@@ -884,7 +885,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
               <div className="p-4 rounded-lg bg-[#FAF8F5] border border-[#E6DFC4] space-y-2">
-                <h4 className="font-mono font-bold text-[#8C531B]">books</h4>
+                <h4 className="font-mono font-bold text-[#681A24]">books</h4>
                 <p className="text-stone-600 text-[11px]">Acervo catalogado, ISBN, localização e contagem de exemplares.</p>
                 <div className="text-[10px] font-mono text-stone-500 space-y-0.5">
                   <div>PK: id (VARCHAR)</div>
@@ -894,7 +895,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
               </div>
 
               <div className="p-4 rounded-lg bg-[#FAF8F5] border border-[#E6DFC4] space-y-2">
-                <h4 className="font-mono font-bold text-[#8C531B]">users</h4>
+                <h4 className="font-mono font-bold text-[#681A24]">users</h4>
                 <p className="text-stone-600 text-[11px]">Alunos e bibliotecárias, matrículas e status de bloqueio.</p>
                 <div className="text-[10px] font-mono text-stone-500 space-y-0.5">
                   <div>PK: id (VARCHAR)</div>
@@ -904,7 +905,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
               </div>
 
               <div className="p-4 rounded-lg bg-[#FAF8F5] border border-[#E6DFC4] space-y-2">
-                <h4 className="font-mono font-bold text-[#8C531B]">loans</h4>
+                <h4 className="font-mono font-bold text-[#681A24]">loans</h4>
                 <p className="text-stone-600 text-[11px]">Relação N:1 entre usuário e livro, com prazo e multas.</p>
                 <div className="text-[10px] font-mono text-stone-500 space-y-0.5">
                   <div>FK: book_id → books(id)</div>
@@ -914,7 +915,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
               </div>
 
               <div className="p-4 rounded-lg bg-[#FAF8F5] border border-[#E6DFC4] space-y-2">
-                <h4 className="font-mono font-bold text-[#8C531B]">reservations</h4>
+                <h4 className="font-mono font-bold text-[#681A24]">reservations</h4>
                 <p className="text-stone-600 text-[11px]">Fila ordenada de espera para obras 100% emprestadas.</p>
                 <div className="text-[10px] font-mono text-stone-500 space-y-0.5">
                   <div>FK: book_id → books(id)</div>
@@ -954,7 +955,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
           {/* Relatório Mensal */}
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs space-y-6">
             <div className="border-b border-[#E6DFC4] pb-4">
-              <span className="text-[11px] font-mono text-[#8C531B] uppercase tracking-wider block">
+              <span className="text-[11px] font-mono text-[#681A24] uppercase tracking-wider block">
                 Relatório 01 · Atividades dos Usuários
               </span>
               <h3 className="font-serif font-bold text-lg text-[#1E1612]">
@@ -985,7 +986,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
               </div>
 
               <div className="p-4 rounded-lg bg-amber-50/70 border border-amber-200">
-                <span className="text-xs text-amber-900 block">Multas Quitadas</span>
+                <span className="text-xs text-[#4A121A] block">Multas Quitadas</span>
                 <span className="text-2xl font-serif font-bold text-amber-950 mt-1 block tabular-nums">
                   R$ {monthlyStats.totalFinesCollected.toFixed(2)}
                 </span>
@@ -995,7 +996,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#E6DFC4]">
               <div>
                 <h4 className="font-serif font-bold text-sm text-[#1E1612] mb-3 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-[#8C531B]" />
+                  <TrendingUp className="w-4 h-4 text-[#681A24]" />
                   <span>Ranking de Alunos com Mais Empréstimos</span>
                 </h4>
                 <div className="space-y-2">
@@ -1013,7 +1014,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                           <span className="text-[10px] text-stone-500 font-sans">{item.user.courseOrDepartment}</span>
                         </div>
                       </div>
-                      <span className="font-mono font-bold text-[#8C531B]">
+                      <span className="font-mono font-bold text-[#681A24]">
                         {item.count} livros
                       </span>
                     </div>
@@ -1023,7 +1024,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
 
               <div>
                 <h4 className="font-serif font-bold text-sm text-[#1E1612] mb-3 flex items-center gap-2">
-                  <PieChart className="w-4 h-4 text-[#8C531B]" />
+                  <PieChart className="w-4 h-4 text-[#681A24]" />
                   <span>Distribuição por Gênero mais Procurado</span>
                 </h4>
                 <div className="space-y-2.5">
@@ -1035,7 +1036,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                       </div>
                       <div className="h-2 rounded-full bg-stone-100 overflow-hidden">
                         <div
-                          className="h-full bg-[#8C531B] rounded-full"
+                          className="h-full bg-[#681A24] rounded-full"
                           style={{
                             width: `${Math.min(100, (item.count / (loans.length || 1)) * 100)}%`,
                           }}
@@ -1056,7 +1057,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                   Relatório 02 · Diagnóstico de Acervo Parado
                 </span>
                 <h3 className="font-serif font-bold text-lg text-[#1E1612] flex items-center gap-2">
-                  <Archive className="w-5 h-5 text-[#8C531B]" />
+                  <Archive className="w-5 h-5 text-[#681A24]" />
                   <span>Livros que NUNCA Foram Pegos pelos Alunos</span>
                 </h3>
               </div>
@@ -1089,7 +1090,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                           <p className="font-serif font-bold text-[#1E1612] text-sm">{b.title}</p>
                           <p className="text-xs text-stone-500">{b.author}</p>
                         </td>
-                        <td className="p-3.5 text-[#8C531B]">{b.genre}</td>
+                        <td className="p-3.5 text-[#681A24]">{b.genre}</td>
                         <td className="p-3.5 font-mono font-bold text-[#1E1612]">{b.totalCopies} cópias</td>
                         <td className="p-3.5 font-mono text-stone-600">{b.location}</td>
                         <td className="p-3.5 text-right">
@@ -1123,7 +1124,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
       {activeTab === 'alunos' && (
         <div className="space-y-6">
           <h2 className="text-xl font-serif font-bold text-[#1E1612] flex items-center gap-2">
-            <Users className="w-5 h-5 text-[#8C531B]" />
+            <Users className="w-5 h-5 text-[#681A24]" />
             <span>Membros & Alunos Registrados</span>
           </h2>
 
@@ -1160,7 +1161,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                             </div>
                           </td>
                           <td className="p-3.5">
-                            <span className="font-mono text-[#8C531B] block">{st.registrationNumber}</span>
+                            <span className="font-mono text-[#681A24] block">{st.registrationNumber}</span>
                             <span className="text-stone-500">{st.courseOrDepartment}</span>
                           </td>
                           <td className="p-3.5 text-stone-600 font-mono">{st.phone}</td>
@@ -1211,7 +1212,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs space-y-4">
             <h3 className="font-serif font-bold text-lg text-[#1E1612] flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-[#8C531B]" />
+              <DollarSign className="w-5 h-5 text-[#681A24]" />
               <span>Políticas de Multas por Atraso & Empréstimos</span>
             </h3>
 
@@ -1307,7 +1308,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white font-semibold text-xs transition-colors"
+                className="w-full py-2.5 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white font-semibold text-xs transition-colors"
               >
                 Salvar Configurações
               </button>
@@ -1316,7 +1317,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
 
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs space-y-4">
             <h3 className="font-serif font-bold text-lg text-[#1E1612] flex items-center gap-2">
-              <Archive className="w-5 h-5 text-[#8C531B]" />
+              <Archive className="w-5 h-5 text-[#681A24]" />
               <span>Backups & Restauração</span>
             </h3>
 
@@ -1326,7 +1327,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                 <p className="text-stone-500 text-[11px] mt-0.5">Arquivo com tabelas e inserts relacionais completos.</p>
                 <button
                   onClick={handleExportSqlDump}
-                  className="mt-2 px-3 py-1.5 rounded-md bg-[#2C1D11] text-white font-medium text-xs flex items-center gap-1.5"
+                  className="mt-2 px-3 py-1.5 rounded-md bg-[#2D0B10] text-white font-medium text-xs flex items-center gap-1.5"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Baixar .sql</span>
@@ -1400,7 +1401,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
       {returningLoan && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
           <div className="bg-[#FAF8F5] rounded-2xl shadow-2xl border border-[#E6DFC4] w-full max-w-md overflow-hidden">
-            <div className="p-5 bg-[#2C1D11] text-white flex items-center justify-between">
+            <div className="p-5 bg-[#2D0B10] text-white flex items-center justify-between">
               <h3 className="font-serif font-bold text-lg">Registrar Devolução</h3>
               <button onClick={() => setReturningLoan(null)} className="text-stone-300 hover:text-white">
                 <XCircle className="w-5 h-5" />
@@ -1455,7 +1456,7 @@ export const LibrarianPortal: React.FC<LibrarianPortalProps> = ({
                 </button>
                 <button
                   onClick={handleConfirmReturn}
-                  className="px-4 py-2 rounded-lg bg-[#2C1D11] text-white font-bold"
+                  className="px-4 py-2 rounded-lg bg-[#2D0B10] text-white font-bold"
                 >
                   Confirmar Devolução
                 </button>

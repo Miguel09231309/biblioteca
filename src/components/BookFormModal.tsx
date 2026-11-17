@@ -96,7 +96,7 @@ export const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, b
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-[#FAF8F5] rounded-2xl shadow-2xl border border-[#E6DFC4] w-full max-w-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="p-5 border-b border-[#E6DFC4] bg-[#2C1D11] text-[#FAF8F5] flex items-center justify-between">
+        <div className="p-5 border-b border-[#E6DFC4] bg-[#2D0B10] text-[#FAF8F5] flex items-center justify-between">
           <div className="flex items-center gap-2">
             {bookToEdit ? <Edit3 className="w-5 h-5 text-[#C89B65]" /> : <BookPlus className="w-5 h-5 text-[#C89B65]" />}
             <div>
@@ -206,7 +206,7 @@ export const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, b
                 required
                 value={formData.totalCopies}
                 onChange={(e) => setFormData({ ...formData, totalCopies: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold text-amber-900"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-bold text-[#4A121A]"
               />
             </div>
 
@@ -267,7 +267,7 @@ export const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, b
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-bold shadow-md transition-colors"
+              className="px-6 py-2.5 rounded-xl bg-[#681A24] hover:bg-[#4A121A] text-white text-xs font-bold shadow-md transition-colors"
             >
               {bookToEdit ? 'Salvar Alterações' : 'Cadastrar no Acervo'}
             </button>

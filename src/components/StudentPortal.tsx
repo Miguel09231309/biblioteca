@@ -16,6 +16,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { Book3D } from './Book3D';
+import { FeaturedCarousel } from './FeaturedCarousel';
 
 interface StudentPortalProps {
   onSelectBook: (book: Book) => void;
@@ -171,17 +172,18 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
     <div className="space-y-10 pb-20">
       
       {/* Editorial Curatorial Marquee Hero */}
-      <section className="relative overflow-hidden rounded-2xl bg-[#231810] text-[#FAF8F5] p-8 sm:p-12 border border-[#3B291C] shadow-lg">
-        <div className="max-w-3xl space-y-4">
-          <div className="text-xs uppercase tracking-widest text-[#C89B65] font-sans">
+      <section className="relative overflow-hidden rounded-2xl bg-[#2D0B10] text-[#FDFBF7] p-8 sm:p-10 border border-[#4A121A] shadow-xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#C99757]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 max-w-3xl space-y-3">
+          <div className="text-xs uppercase tracking-widest text-[#E5B869] font-mono font-bold">
             Catálogo & Acervo Literário · Ano Acadêmico 2026
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-[#FAF8F5] leading-tight tracking-tight text-balance">
+          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-[#FDFBF7] leading-tight tracking-tight text-balance">
             O silêncio fecundo da leitura e a nobreza do saber.
           </h1>
 
-          <p className="text-[#D4C5B3] text-sm sm:text-base leading-relaxed max-w-2xl">
+          <p className="text-stone-300 text-xs sm:text-sm leading-relaxed max-w-2xl font-sans">
             Consulte a disponibilidade em tempo real das obras físicas, acompanhe as previsões exatas de retorno de volumes emprestados e reserve títulos disputados para retirada rápida.
           </p>
 
@@ -209,7 +211,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
           onClick={() => setActiveTab('acervo')}
           className={`pb-3 transition-colors relative whitespace-nowrap ${
             activeTab === 'acervo'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#2D0B10] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
@@ -220,13 +222,13 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
           onClick={() => setActiveTab('meus-emprestimos')}
           className={`pb-3 transition-colors relative whitespace-nowrap flex items-center gap-2 ${
             activeTab === 'meus-emprestimos'
-              ? 'text-[#1E1612] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#8C531B]'
+              ? 'text-[#2D0B10] font-serif font-bold text-base after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#681A24]'
               : 'text-stone-500 hover:text-stone-800'
           }`}
         >
           <span>Meus Empréstimos & Reservas</span>
           {currentUser && (activeLoans.length > 0 || pendingLoans.length > 0 || userReservations.length > 0) && (
-            <span className="font-mono text-xs px-1.5 py-0.2 bg-[#EFE8DC] text-[#8C531B] rounded-sm font-bold">
+            <span className="font-mono text-xs px-1.5 py-0.2 bg-[#F7F2EA] text-[#681A24] rounded-sm font-bold border border-[#681A24]/20">
               {activeLoans.length + pendingLoans.length + userReservations.length}
             </span>
           )}
@@ -238,7 +240,13 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
       {/* ========================================================= */}
       {activeTab === 'acervo' && (
         <div className="space-y-8">
-          
+          {/* Featured Rotating 3D Hero Carousel */}
+          <FeaturedCarousel
+            books={books}
+            onSelectBook={onSelectBook}
+            getExpectedReturnDate={getExpectedReturnDate}
+          />
+
           {/* Controls: Search, Sort and Interactive Segmented Filters */}
           <div className="bg-[#FAF8F5] p-6 rounded-xl border border-[#E6DFC4] shadow-xs space-y-5">
             {/* Search Input Bar */}
@@ -250,7 +258,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Pesquisar por título, autor, gênero ou código ISBN..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[#D5CCBE] bg-white text-sm text-[#1E1612] placeholder:text-stone-400 focus:outline-hidden focus:border-[#8C531B] focus:ring-1 focus:ring-[#8C531B]/30"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[#D5CCBE] bg-white text-sm text-[#1E1612] placeholder:text-stone-400 focus:outline-hidden focus:border-[#681A24] focus:ring-1 focus:ring-[#681A24]/30"
                 />
                 {searchTerm && (
                   <button
@@ -267,7 +275,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="px-3 py-2.5 rounded-lg border border-[#D5CCBE] bg-white text-xs sm:text-sm text-stone-700 focus:outline-hidden focus:border-[#8C531B]"
+                  className="px-3 py-2.5 rounded-lg border border-[#D5CCBE] bg-white text-xs sm:text-sm text-stone-700 focus:outline-hidden focus:border-[#681A24]"
                 >
                   <option value="title">Ordem Alfabética (Título A-Z)</option>
                   <option value="author">Ordenar por Autor</option>
@@ -326,8 +334,8 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                   onClick={() => setSelectedGenre('todos')}
                   className={`px-3 py-1.5 rounded-md transition-colors ${
                     selectedGenre === 'todos'
-                      ? 'bg-[#2C1D11] text-white font-medium'
-                      : 'bg-white border border-[#D5CCBE] text-stone-700 hover:bg-[#EFE8DC]'
+                      ? 'bg-[#4A121A] text-white font-medium shadow-xs'
+                      : 'bg-white border border-[#D5CCBE] text-stone-700 hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Todos os Gêneros
@@ -340,8 +348,8 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                       onClick={() => setSelectedGenre(g)}
                       className={`px-3 py-1.5 rounded-md transition-colors flex items-center gap-1.5 ${
                         selectedGenre === g
-                          ? 'bg-[#2C1D11] text-white font-medium'
-                          : 'bg-white border border-[#D5CCBE] text-stone-700 hover:bg-[#EFE8DC]'
+                          ? 'bg-[#4A121A] text-white font-medium shadow-xs'
+                          : 'bg-white border border-[#D5CCBE] text-stone-700 hover:bg-[#F7F2EA]'
                       }`}
                     >
                       <span>{g}</span>
@@ -369,7 +377,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                   setSelectedGenre('todos');
                   setAvailabilityFilter('todos');
                 }}
-                className="px-4 py-2 rounded-lg bg-[#2C1D11] text-white text-xs font-medium hover:bg-[#3D2918]"
+                className="px-4 py-2 rounded-lg bg-[#4A121A] text-white text-xs font-medium hover:bg-[#5C1620]"
               >
                 Limpar Todos os Filtros
               </button>
@@ -384,7 +392,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                   <article
                     key={book.id}
                     onClick={() => onSelectBook(book)}
-                    className="group bg-white rounded-xl border border-[#E6DFC4] p-4 flex flex-col justify-between hover:border-[#8C531B]/50 transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md"
+                    className="group bg-white rounded-xl border border-[#E6DFC4] p-4 flex flex-col justify-between hover:border-[#681A24]/60 transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md"
                   >
                     {/* 3D Realistic Book Display */}
                     <div className="mb-4">
@@ -401,14 +409,14 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                       <div>
                         {/* Unboxed Metadata Line with typographic separators */}
                         <div className="flex items-center gap-1.5 text-[11px] text-stone-500 font-sans">
-                          <span className="text-[#8C531B] font-medium">{book.genre}</span>
+                          <span className="text-[#681A24] font-medium">{book.genre}</span>
                           <span aria-hidden="true">·</span>
                           <span className="font-mono tabular-nums">{book.publishedYear}</span>
                           <span aria-hidden="true">·</span>
                           <span>{book.pages} pág.</span>
                         </div>
 
-                        <h3 className="font-serif font-bold text-lg text-[#1E1612] group-hover:text-[#8C531B] transition-colors line-clamp-1 mt-1">
+                        <h3 className="font-serif font-bold text-lg text-[#1E1612] group-hover:text-[#681A24] transition-colors line-clamp-1 mt-1">
                           {book.title}
                         </h3>
 
@@ -423,20 +431,20 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                           <div className="flex items-center justify-between text-emerald-900 font-medium">
                             <span className="flex items-center gap-1">
                               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-                              <span>{book.availableCopies} exemplares na estante</span>
+                              <span>{book.availableCopies} na estante</span>
                             </span>
-                            <span className="text-[#8C531B] group-hover:translate-x-1 transition-transform">
+                            <span className="text-[#681A24] font-semibold group-hover:translate-x-1 transition-transform">
                               Detalhes &rarr;
                             </span>
                           </div>
                         ) : (
                           <div className="space-y-1">
-                            <div className="flex items-center justify-between text-[#8C2424] font-medium">
+                            <div className="flex items-center justify-between text-[#6B1724] font-medium">
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3.5 h-3.5 text-rose-700" />
-                                <span>100% Emprestado</span>
+                                <span>Emprestado</span>
                               </span>
-                              <span className="text-stone-500 group-hover:text-[#8C531B] transition-colors">
+                              <span className="text-stone-500 group-hover:text-[#681A24] transition-colors font-semibold">
                                 Reservar &rarr;
                               </span>
                             </div>
@@ -467,7 +475,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
         <div className="space-y-8">
           {!currentUser ? (
             <div className="bg-white rounded-xl border border-[#E6DFC4] p-10 text-center max-w-lg mx-auto space-y-4 shadow-sm">
-              <UserCheck className="w-10 h-10 text-[#8C531B] mx-auto" />
+              <UserCheck className="w-10 h-10 text-[#681A24] mx-auto" />
               <h2 className="font-serif font-bold text-xl text-[#1E1612]">
                 Identifique-se como Aluno
               </h2>
@@ -476,7 +484,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
               </p>
               <button
                 onClick={onOpenAuth}
-                className="px-5 py-2.5 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white font-medium text-xs shadow-xs"
+                className="px-5 py-2.5 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white font-medium text-xs shadow-xs"
               >
                 Entrar ou Cadastrar Aluno
               </button>
@@ -496,7 +504,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                       {currentUser.name}
                     </h2>
                     <div className="flex items-center gap-2 text-xs text-stone-600 mt-0.5">
-                      <span className="font-mono text-[#8C531B] font-semibold">{currentUser.registrationNumber}</span>
+                      <span className="font-mono text-[#681A24] font-semibold">{currentUser.registrationNumber}</span>
                       <span aria-hidden="true">·</span>
                       <span>{currentUser.courseOrDepartment}</span>
                       <span aria-hidden="true">·</span>
@@ -515,7 +523,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
 
                   <div>
                     <span className="block text-[11px] text-stone-500 uppercase tracking-wider font-sans">Reservas</span>
-                    <span className="font-serif font-bold text-lg text-[#8C531B] tabular-nums">
+                    <span className="font-serif font-bold text-lg text-[#681A24] tabular-nums">
                       {userReservations.length}
                     </span>
                   </div>
@@ -562,7 +570,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                       return (
                         <div
                           key={loan.id}
-                          className="bg-white rounded-xl border border-[#E6DFC4] p-4 flex gap-4 hover:border-[#8C531B]/40 transition-colors shadow-xs"
+                          className="bg-white rounded-xl border border-[#E6DFC4] p-4 flex gap-4 hover:border-[#681A24]/40 transition-colors shadow-xs"
                         >
                           <div className="w-20 shrink-0">
                             <img
@@ -698,7 +706,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({
                               </div>
                             ) : (
                               <div className="mt-1 text-xs text-stone-600 space-y-0.5">
-                                <p>Posição na fila: <strong className="text-[#8C531B]">{res.queuePosition}º lugar</strong></p>
+                                <p>Posição na fila: <strong className="text-[#681A24]">{res.queuePosition}º lugar</strong></p>
                                 <p>Previsão: {new Date(res.expectedAvailableDate).toLocaleDateString('pt-BR')}</p>
                               </div>
                             )}

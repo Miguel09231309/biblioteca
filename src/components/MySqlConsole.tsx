@@ -151,15 +151,15 @@ export const MySqlConsole: React.FC = () => {
     <div className="space-y-6 pb-16">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl bg-[#2C1D11] text-white text-xs font-semibold shadow-2xl border border-[#C89B65]/40 flex items-center gap-2 animate-in slide-in-from-bottom-2">
-          <Sparkles className="w-4 h-4 text-[#C89B65]" />
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl bg-[#4A121A] text-white text-xs font-semibold shadow-2xl border border-[#C99757]/40 flex items-center gap-2 animate-in slide-in-from-bottom-2">
+          <Sparkles className="w-4 h-4 text-[#E5B869]" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Header Banner - MySQL Enterprise Atelier */}
-      <section className="bg-[#1C1612] text-white rounded-2xl p-6 sm:p-8 border border-[#3E2B1E] shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#B47836]/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="bg-[#2D0B10] text-white rounded-2xl p-6 sm:p-8 border border-[#4A121A] shadow-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#C99757]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2">
@@ -168,17 +168,17 @@ export const MySqlConsole: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Motor Relacional MySQL 8.0 Conectado
               </span>
-              <span className="text-stone-400 font-mono text-xs hidden sm:inline">
+              <span className="text-stone-300 font-mono text-xs hidden sm:inline">
                 InnoDB · utf8mb4 · ACID Compliance
               </span>
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight flex items-center gap-3">
-              <Database className="w-7 h-7 text-[#C89B65]" />
+              <Database className="w-7 h-7 text-[#E5B869]" />
               <span>Central & Terminal Interativo MySQL</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-stone-300 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-stone-200 max-w-2xl leading-relaxed">
               Ambiente de interação direta com o banco relacional da biblioteca. Execute consultas SQL (SELECT, JOIN, DML), inspecione chaves primárias e estrangeiras, gere dumps para produção e integre com servidores MySQL externos.
             </p>
           </div>
@@ -186,9 +186,9 @@ export const MySqlConsole: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={handleDownloadDump}
-              className="px-4 py-2.5 rounded-lg bg-[#8C531B] hover:bg-[#724114] text-white font-medium text-xs shadow-md transition-colors flex items-center gap-2"
+              className="px-4 py-2.5 rounded-lg bg-[#681A24] hover:bg-[#7D202C] text-white font-medium text-xs shadow-md transition-colors flex items-center gap-2 border border-[#C99757]/30"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 text-[#E5B869]" />
               <span>Baixar Dump .sql</span>
             </button>
             <button
@@ -230,7 +230,7 @@ export const MySqlConsole: React.FC = () => {
           onClick={() => setActiveSubTab('query')}
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shrink-0 ${
             activeSubTab === 'query'
-              ? 'bg-[#2C1D11] text-white font-bold shadow-xs'
+              ? 'bg-[#2D0B10] text-white font-bold shadow-xs'
               : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
           }`}
         >
@@ -242,7 +242,7 @@ export const MySqlConsole: React.FC = () => {
           onClick={() => setActiveSubTab('schema')}
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shrink-0 ${
             activeSubTab === 'schema'
-              ? 'bg-[#2C1D11] text-white font-bold shadow-xs'
+              ? 'bg-[#2D0B10] text-white font-bold shadow-xs'
               : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
           }`}
         >
@@ -254,7 +254,7 @@ export const MySqlConsole: React.FC = () => {
           onClick={() => setActiveSubTab('dump')}
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shrink-0 ${
             activeSubTab === 'dump'
-              ? 'bg-[#2C1D11] text-white font-bold shadow-xs'
+              ? 'bg-[#2D0B10] text-white font-bold shadow-xs'
               : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
           }`}
         >
@@ -266,7 +266,7 @@ export const MySqlConsole: React.FC = () => {
           onClick={() => setActiveSubTab('connection')}
           className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shrink-0 ${
             activeSubTab === 'connection'
-              ? 'bg-[#2C1D11] text-white font-bold shadow-xs'
+              ? 'bg-[#2D0B10] text-white font-bold shadow-xs'
               : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
           }`}
         >
@@ -284,7 +284,7 @@ export const MySqlConsole: React.FC = () => {
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-4 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-serif font-bold text-xs text-[#1E1612] flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#8C531B]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#681A24]" />
                 <span>Consultas Rápidas Recomendadas (1-Clique):</span>
               </span>
               <span className="text-[11px] text-stone-500 font-mono">Clique para carregar e executar</span>
@@ -394,7 +394,7 @@ export const MySqlConsole: React.FC = () => {
 
           {/* SQL Editor Box */}
           <div className="bg-[#1C1612] rounded-xl border border-[#3E2B1E] overflow-hidden shadow-lg">
-            <div className="px-4 py-2.5 bg-[#140F0D] border-b border-[#2C1D11] flex flex-wrap items-center justify-between gap-2">
+            <div className="px-4 py-2.5 bg-[#140F0D] border-b border-[#2D0B10] flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
                 <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
@@ -435,7 +435,7 @@ export const MySqlConsole: React.FC = () => {
               />
             </div>
 
-            <div className="px-4 py-3 bg-[#140F0D] border-t border-[#2C1D11] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="px-4 py-3 bg-[#140F0D] border-t border-[#2D0B10] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="text-[11px] text-stone-400 font-mono flex items-center gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#C89B65]" />
                 <span>Dica: Comandos DML como INSERT e UPDATE atualizam o acervo em tempo real!</span>
@@ -443,7 +443,7 @@ export const MySqlConsole: React.FC = () => {
 
               <button
                 onClick={() => handleRunQuery()}
-                className="w-full sm:w-auto px-5 py-2 rounded-lg bg-[#8C531B] hover:bg-[#A86422] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-5 py-2 rounded-lg bg-[#681A24] hover:bg-[#852230] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>Executar SQL (MySQL Syntax)</span>
@@ -459,7 +459,7 @@ export const MySqlConsole: React.FC = () => {
                   Data Output Viewer
                 </span>
                 <h3 className="font-serif font-bold text-base text-[#1E1612] flex items-center gap-2">
-                  <TableIcon className="w-4 h-4 text-[#8C531B]" />
+                  <TableIcon className="w-4 h-4 text-[#681A24]" />
                   <span>Resultado da Consulta</span>
                 </h3>
               </div>
@@ -574,8 +574,8 @@ export const MySqlConsole: React.FC = () => {
                 onClick={() => setSelectedSchemaTable(s.tableName)}
                 className={`p-3.5 rounded-xl border text-left transition-all ${
                   selectedSchemaTable === s.tableName
-                    ? 'bg-[#2C1D11] text-white border-[#2C1D11] shadow-md'
-                    : 'bg-white text-stone-800 border-[#E6DFC4] hover:border-[#8C531B]'
+                    ? 'bg-[#2D0B10] text-white border-[#2D0B10] shadow-md'
+                    : 'bg-white text-stone-800 border-[#E6DFC4] hover:border-[#681A24]'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -599,11 +599,11 @@ export const MySqlConsole: React.FC = () => {
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs space-y-6">
             <div className="border-b border-[#E6DFC4] pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-mono text-[#8C531B] uppercase tracking-wider block">
+                <span className="text-xs font-mono text-[#681A24] uppercase tracking-wider block">
                   Tabela Relacional MySQL · Engine: {activeTableMeta.engine}
                 </span>
                 <h2 className="text-xl font-serif font-bold text-[#1E1612] flex items-center gap-2">
-                  <TableIcon className="w-5 h-5 text-[#8C531B]" />
+                  <TableIcon className="w-5 h-5 text-[#681A24]" />
                   <span>CREATE TABLE {activeTableMeta.tableName}</span>
                 </h2>
                 <p className="text-xs text-stone-600 mt-1">{activeTableMeta.description}</p>
@@ -635,7 +635,7 @@ export const MySqlConsole: React.FC = () => {
                     {activeTableMeta.columns.map((c) => (
                       <tr key={c.name} className="hover:bg-stone-50">
                         <td className="p-3 font-bold text-[#1E1612]">{c.name}</td>
-                        <td className="p-3 text-[#8C531B]">{c.type}</td>
+                        <td className="p-3 text-[#681A24]">{c.type}</td>
                         <td className="p-3 text-stone-600">{c.nullable ? 'YES' : 'NO'}</td>
                         <td className="p-3">
                           {c.isKey === 'PRI' ? (
@@ -689,7 +689,7 @@ export const MySqlConsole: React.FC = () => {
               <ul className="space-y-1 font-mono text-xs text-stone-600 bg-stone-50 p-3 rounded-lg border border-stone-200">
                 {activeTableMeta.indexes.map((idx, i) => (
                   <li key={i} className="flex items-center gap-2">
-                    <span className="text-[#8C531B]">&bull;</span>
+                    <span className="text-[#681A24]">&bull;</span>
                     <span>{idx}</span>
                   </li>
                 ))}
@@ -706,7 +706,7 @@ export const MySqlConsole: React.FC = () => {
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-mono text-[#8C531B] uppercase tracking-wider block">
+              <span className="text-xs font-mono text-[#681A24] uppercase tracking-wider block">
                 MySQL Export Engine
               </span>
               <h3 className="font-serif font-bold text-lg text-[#1E1612]">
@@ -720,7 +720,7 @@ export const MySqlConsole: React.FC = () => {
             <div className="flex gap-2">
               <button
                 onClick={handleDownloadDump}
-                className="px-4 py-2.5 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white font-medium text-xs flex items-center gap-2 shadow-sm transition-colors"
+                className="px-4 py-2.5 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white font-medium text-xs flex items-center gap-2 shadow-sm transition-colors"
               >
                 <Download className="w-4 h-4" />
                 <span>Baixar .sql</span>
@@ -736,7 +736,7 @@ export const MySqlConsole: React.FC = () => {
           </div>
 
           <div className="bg-[#1C1612] rounded-xl border border-[#3E2B1E] overflow-hidden shadow-lg">
-            <div className="px-4 py-3 bg-[#140F0D] border-b border-[#2C1D11] flex items-center justify-between text-xs text-stone-400 font-mono">
+            <div className="px-4 py-3 bg-[#140F0D] border-b border-[#2D0B10] flex items-center justify-between text-xs text-stone-400 font-mono">
               <span>bibliosaber_mysql_dump.sql</span>
               <span>UTF-8 · MySQL 8.0 DDL/DML</span>
             </div>
@@ -756,7 +756,7 @@ export const MySqlConsole: React.FC = () => {
             {/* Connection Tester Form */}
             <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs space-y-5">
               <div className="border-b border-[#E6DFC4] pb-3">
-                <span className="text-xs font-mono text-[#8C531B] uppercase tracking-wider block">
+                <span className="text-xs font-mono text-[#681A24] uppercase tracking-wider block">
                   Configuração de Conexão MySQL
                 </span>
                 <h3 className="font-serif font-bold text-lg text-[#1E1612]">
@@ -828,7 +828,7 @@ export const MySqlConsole: React.FC = () => {
                 <button
                   onClick={handleTestConnection}
                   disabled={isTestingConn}
-                  className="w-full py-2.5 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors disabled:opacity-50"
+                  className="w-full py-2.5 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors disabled:opacity-50"
                 >
                   {isTestingConn ? (
                     <>
@@ -886,7 +886,7 @@ export const MySqlConsole: React.FC = () => {
           {/* Code snippet for Node.js mysql2/promise backend */}
           <div className="bg-white rounded-xl border border-[#E6DFC4] p-6 shadow-xs space-y-4">
             <h3 className="font-serif font-bold text-base text-[#1E1612] flex items-center gap-2">
-              <FileCode2 className="w-5 h-5 text-[#8C531B]" />
+              <FileCode2 className="w-5 h-5 text-[#681A24]" />
               <span>Código de Integração Backend (Node.js + Express + mysql2)</span>
             </h3>
             <p className="text-xs text-stone-600">

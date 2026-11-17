@@ -58,9 +58,9 @@ function LibraryAppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1E1612] flex flex-col font-sans selection:bg-[#B47836]/25 selection:text-[#3B220C]">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#1E1612] flex flex-col font-sans selection:bg-[#681A24]/20 selection:text-[#380E14]">
       {/* Top Utility & Role Indicator Strip */}
-      <div className="bg-[#1C1612] text-[#D4C5B3] text-xs py-2 px-4 border-b border-[#3E2B1E]">
+      <div className="bg-[#2D0B10] text-[#EFE8DC] text-xs py-2 px-4 border-b border-[#4A121A]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
@@ -76,26 +76,26 @@ function LibraryAppContent() {
             <a
               href="/api/download-standalone"
               download="index.html"
-              className="px-2.5 py-1 rounded-sm bg-[#8C531B] hover:bg-[#A86422] text-white font-semibold text-[11px] flex items-center gap-1.5 transition-colors shadow-xs"
+              className="px-2.5 py-1 rounded-sm bg-[#681A24] hover:bg-[#7E1F2C] text-white font-semibold text-[11px] flex items-center gap-1.5 transition-colors shadow-xs border border-[#C99757]/30"
               title="Baixar arquivo index.html único autônomo para rodar direto no navegador sem servidor"
             >
-              <Download className="w-3 h-3 text-[#E8D7C3]" />
+              <Download className="w-3 h-3 text-[#E5B869]" />
               <span>Baixar index.html Único</span>
             </a>
             <button
               onClick={() => setActiveTab('sql-database')}
               className={`px-2.5 py-1 rounded-sm text-[11px] font-semibold flex items-center gap-1.5 transition-colors border ${
                 activeTab === 'sql-database'
-                  ? 'bg-[#B47836] text-white border-[#B47836]'
-                  : 'bg-emerald-950/70 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/80 shadow-xs'
+                  ? 'bg-[#C99757] text-[#24080D] font-bold border-[#C99757]'
+                  : 'bg-[#4A121A] text-[#E5B869] border-[#C99757]/40 hover:bg-[#5C1620] shadow-xs'
               }`}
             >
-              <Database className="w-3 h-3 text-emerald-400" />
+              <Database className="w-3 h-3 text-[#E5B869]" />
               <span>Console MySQL</span>
             </button>
             <button
               onClick={handleToggleRole}
-              className="px-2.5 py-1 rounded-sm bg-white/10 hover:bg-white/15 text-[#C89B65] font-semibold text-[11px] flex items-center gap-1.5 transition-colors border border-white/10"
+              className="px-2.5 py-1 rounded-sm bg-white/10 hover:bg-white/15 text-[#E5B869] font-semibold text-[11px] flex items-center gap-1.5 transition-colors border border-white/10"
             >
               <ArrowRightLeft className="w-3 h-3" />
               <span>
@@ -162,7 +162,7 @@ function LibraryAppContent() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-md bg-[#2C1D11] border border-[#B47836]/30 flex items-center justify-center text-[#E8D7C3]">
+                <div className="w-8 h-8 rounded-md bg-[#2D0B10] border border-[#B47836]/30 flex items-center justify-center text-[#E8D7C3]">
                   <span className="font-serif font-bold text-base italic">B</span>
                 </div>
                 <span className="font-serif font-bold text-lg text-white">

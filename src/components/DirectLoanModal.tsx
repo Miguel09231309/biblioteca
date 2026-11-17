@@ -48,7 +48,7 @@ export const DirectLoanModal: React.FC<DirectLoanModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-[#FAF8F5] rounded-2xl shadow-2xl border border-[#E6DFC4] w-full max-w-lg overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="p-5 border-b border-[#E6DFC4] bg-[#2C1D11] text-[#FAF8F5] flex items-center justify-between">
+        <div className="p-5 border-b border-[#E6DFC4] bg-[#2D0B10] text-[#FAF8F5] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookCheck className="w-5 h-5 text-[#C89B65]" />
             <div>

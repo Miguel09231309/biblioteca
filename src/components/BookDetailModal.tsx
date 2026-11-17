@@ -85,7 +85,7 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, onClose,
         {/* Header Bar */}
         <div className="p-4 sm:p-5 border-b border-[#E6DFC4] flex items-center justify-between bg-[#F4EFE6]">
           <div className="flex items-center gap-2 text-xs font-sans text-stone-600">
-            <span className="font-semibold text-[#8C531B]">{book.genre}</span>
+            <span className="font-semibold text-[#681A24]">{book.genre}</span>
             <span aria-hidden="true">·</span>
             <span className="font-mono">ISBN: {book.isbn}</span>
           </div>
@@ -110,7 +110,7 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, onClose,
               />
 
               <div className="mt-4 p-3 rounded-lg bg-[#EFE8DC]/70 border border-[#D5CCBE] text-xs text-stone-700 flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#8C531B] shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#681A24] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-semibold block text-[#1E1612]">Localização física:</span>
                   <span>{book.location}</span>
@@ -239,7 +239,7 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, onClose,
                 </p>
                 <button
                   onClick={onOpenAuth}
-                  className="px-4 py-2 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white font-medium text-xs shrink-0"
+                  className="px-4 py-2 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white font-medium text-xs shrink-0"
                 >
                   Entrar / Cadastrar
                 </button>
@@ -275,11 +275,11 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, onClose,
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Observação opcional para a bibliotecária..."
-                  className="w-full px-3 py-2 text-xs border border-[#D5CCBE] bg-white rounded-lg focus:outline-hidden focus:border-[#8C531B]"
+                  className="w-full px-3 py-2 text-xs border border-[#D5CCBE] bg-white rounded-lg focus:outline-hidden focus:border-[#681A24]"
                 />
                 <button
                   onClick={handleBorrowRequest}
-                  className="w-full py-3 px-4 rounded-lg bg-[#2C1D11] hover:bg-[#3D2918] text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 rounded-lg bg-[#2D0B10] hover:bg-[#4A121A] text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2"
                 >
                   <BookOpen className="w-4 h-4" />
                   <span>Solicitar Empréstimo ({settings.standardLoanDays} dias de prazo)</span>
@@ -292,7 +292,7 @@ export const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, onClose,
                 </div>
                 <button
                   onClick={handleReservation}
-                  className="w-full py-3 px-4 rounded-lg bg-[#8C531B] hover:bg-[#724114] text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 rounded-lg bg-[#681A24] hover:bg-[#4A121A] text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2"
                 >
                   <BookmarkCheck className="w-4 h-4" />
                   <span>Reservar Obra na Fila Online</span>

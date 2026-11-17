@@ -3,7 +3,7 @@
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: #FAF8F5;
+    background-color: #FDFBF7;
     color: #1E1612;
   }
 
@@ -20,23 +20,23 @@
   perspective: 1000px;
 }
 
-/* Custom scrollbar matching walnut and parchment tones */
+/* Custom scrollbar matching bordeaux and ivory tones */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F2ECE1;
+  background: #F7F2EA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C9BAA7;
+  background: #681A24;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A8957F;
+  background: #4A121A;
 }
 
 @media print {
